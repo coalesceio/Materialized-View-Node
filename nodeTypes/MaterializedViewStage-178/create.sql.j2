@@ -1,0 +1,381 @@
+{#
+    Copyright (c) 2023 Coalesce. All rights reserved.
+This script and its associated documentation are confidential and proprietary to Coalesce.
+Unauthorized reproduction, distribution, or disclosure of this material is strictly prohibited.
+Coalesce permits you to copy and modify this script for the purposes of using with Coalsce but
+does not permit copying or modification for any other purpose.  
+#}
+{# == Node Type Version        : 1  == #}
+{# == Node Type Name           : Materialized View Stage == #}
+{# == Node Type Description    : This node creates a materialized view == #}
+
+
+{% if desiredState == currentState %}
+
+{{ stage('Nothing to do.') }}
+select 1 = 0
+
+{% elif desiredState %}
+    {# Identify all config changes that would cause a CREATE instead of ALTER #}
+    {% if currentState != undefined %} 
+        {# General metadata #}
+        {% set columnsTest = currentState.columns == desiredState.columns %}
+        {% set joinTest = currentState.join == desiredState.join %}
+
+        {# Test to see if the transform in a column has changed #}
+        {# Desired Namespace Variables Transform #}
+        {% set desiredTransformArray = desiredState.sources | map(attribute='columns') | first | map(attribute='transform') | list -%}
+
+        {# Test to see if the transform in a column has changed #}
+        {# Current Namespace Variables Transform #}
+        {% set currentTransformArray = currentState.sources | map(attribute='columns') | first | map(attribute='transform') | list -%}
+
+        {% set columnsTransformTest = currentTransformArray == desiredTransformArray %}
+
+        {# Storage Location Tests #}
+        {# Only need to account for updated Storage Location mappings   #}
+        {# sourceTest handles changed Storage Location Names #}
+        {# Current Namespace Varialbes #}
+        {% set nsVariables = namespace(nsCurrentDepStorageLocations="") %}
+        {% set nsVariables = namespace(nsCurrentSourceStorageLocations="") %}
+        {% set nsVariables = namespace(nsCurrentTargetStorageLocations="") %}
+        {% set nsVariables = namespace(nsCurrentUsedStorageLocations="") %}
+
+        {# Current State Storage Location Info #}
+        {% for source in currentState.sources %}
+            {% for dep in source.dependencies %}
+                {% set depSourceLocation = dep.node.location.name %}
+                {% if loop.first %}
+                    {% set nsVariables.nsCurrentDepStorageLocations = depSourceLocation %}
+                {% else %}
+                    {% set nsVariables.nsCurrentDepStorageLocations = nsVariables.nsCurrentDepStorageLocations + ',' + depSourceLocation %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if loop.first %}
+                {% set nsVariables.nsCurrentSourceStorageLocations = nsVariables.nsCurrentDepStorageLocations %}
+            {% else %}
+                {% set nsVariables.nsCurrentSourceStorageLocations = nsVariables.nsCurrentSourceStorageLocations + ',' + nsVariables.nsCurrentDepStorageLocations %}
+            {% endif %}
+        {% endfor %}
+
+        {% set nsVariables.nsCurrentTargetStorageLocations = currentState.node.location.name  %}
+
+        {% set nsVariables.nsCurrentUsedStorageLocations = nsVariables.nsCurrentSourceStorageLocations + ',' + nsVariables.nsCurrentTargetStorageLocations %}
+
+        {% set currentStorageLocations = (nsVariables.nsCurrentUsedStorageLocations).split(',') | list %}
+        {% set currentUniqueStorageLocations = currentStorageLocations | unique | sort | list %}
+
+        {# Desired Namespace Variables #}
+        {% set nsVariables = namespace(nsDesiredDepStorageLocations="") %}
+        {% set nsVariables = namespace(nsDesiredSourceStorageLocations="") %}
+        {% set nsVariables = namespace(nsDesiredTargetStorageLocations="") %}
+        {% set nsVariables = namespace(nsDesiredUsedStorageLocations="") %}
+
+        {% set nsVariables = namespace(storageLocationTest="") %}
+
+        {# Desired State Storage Location Info #}
+        {% for source in desiredState.sources %}
+            {% for dep in source.dependencies %}
+                {% set depSourceLocation = dep.node.location.name %}
+                {% if loop.first %}
+                    {% set nsVariables.nsDesiredDepStorageLocations = depSourceLocation %}
+                {% else %}
+                    {% set nsVariables.nnsDesiredDepStorageLocations = nsVariables.nsDesiredDepStorageLocations + ',' + depSourceLocation %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if loop.first %}
+                {% set nsVariables.nsDesiredSourceStorageLocations = nsVariables.nsDesiredDepStorageLocations %}
+            {% else %}
+                {% set nsVariables.nsDesiredSourceStorageLocations = nsVariables.nsDesiredSourceStorageLocations + ',' + nsVariables.nsDesiredDepStorageLocations %}
+            {% endif %}
+        {% endfor %}
+
+        {% set nsVariables.nsDesiredTargetStorageLocations = desiredState.node.location.name  %}
+
+        {% set nsVariables.nsDesiredUsedStorageLocations = nsVariables.nsDesiredSourceStorageLocations + ',' + nsVariables.nsDesiredTargetStorageLocations %}
+
+        {% set desiredStorageLocations = (nsVariables.nsDesiredUsedStorageLocations).split(',') | list %}
+        {% set desiredUniqueStorageLocations = desiredStorageLocations | unique | sort | list %}
+
+        {# Test  #}
+        {% set nsVariables.storageLocationTest = true %}
+        {% for name in desiredUniqueStorageLocations if nsVariables.storageLocationTest == true %}
+            {# Current mappings #}
+            {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
+            {% set currentSchema = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
+            {% set currentDatabaseSchema = currentDatabase + '.' + currentSchema %}
+            
+            {# Desired mappings #}
+            {% set desiredDatabase = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
+            {% set desiredSchema = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
+            {% set desiredDatabaseSchema = desiredDatabase + '.' + desiredSchema %}
+
+            {% if currentDatabaseSchema != desiredDatabaseSchema %}
+                {% set nsVariables.storageLocationTest = false %}
+            {% endif %}
+        {% endfor %}
+
+        {# Config #}
+        {% set selectDistinctTest = currentState.config.selectDistinct == desiredState.config.selectDistinct %}
+
+        {# Node #}
+        {% set nodeMaterializationType = currentState.node.materializationType == desiredState.node.materializationType %}
+
+        {# If any of the above are false then a CREATE must be run #}
+        {% if 
+            columnsTest == false or
+            joinTest == false or
+            columnsTransformTest == false or
+            nsVariables.storageLocationTest == false or 
+            selectDistinctTest == false or 
+            nodeMaterializationType == false %}    
+
+            {% set createTest = true %}
+        {% else %}
+            {% set createTest = false %}
+        {% endif %}
+    {% endif %}
+    
+    {# Identify config changes that would only result in ALTER #}
+    {% if createTest == false %}
+        {% set nodeNameTest = currentState.node.name == desiredState.node.name %}
+
+        {% set secureOptionTest = currentState.config.secureOption == desiredState.config.secureOption %}
+
+        {% set nodeCommentTest = currentState.node.description == desiredState.node.description %}
+
+        {# Clustering Test #}
+        {% set clusterKeyTest = currentState.config.clusterKey == desiredState.config.clusterKey %}
+        {% set clusterKeyExpressionsTest = currentState.config.clusterKeyExpressions == desiredState.config.clusterKeyExpressions %}
+        {% set clusterKeyConfigTest = currentState.config.clusterKeyConfig == desiredState.config.clusterKeyConfig %}
+        {% set clusterKeyConfigExpressionsTest = currentState.config.clusterKeyConfigExpressions == desiredState.config.clusterKeyConfigExpressions %}
+
+        {% if 
+            clusterKeyTest == false or
+            clusterKeyExpressionsTest == false or
+            clusterKeyConfigTest == false or
+            clusterKeyConfigExpressionsTest == false %}
+
+            {% set clusterTest = false %}
+        {% else %}
+            {% set clusterTest = true %}
+        {% endif %}
+
+        {% if 
+            nodeNameTest == false or
+            clusterTest == false or
+            secureOptionTest == false or
+            nodeCommentTest == false %}    
+
+            {% set alterOnlyTest = true %}
+        {% else %}
+            {% set alterOnlyTest = false %}
+        {% endif %}
+    {% endif %}
+
+
+    {# CREATE or ALTER #}
+    {% if (currentState == undefined) or (createTest == true) %}
+
+        {# Materialized View Name #}
+        {% set targetMaterializedViewDatabase = ref_no_link(desiredState.node.location.name, desiredState.node.name).split('.')[0] %} 
+        {% set targetMaterializedViewSchema = ref_no_link(desiredState.node.location.name, desiredState.node.name).split('.')[1] %} 
+        {% set fullyQualifiedTargetMaterializedViewName = ref_no_link(desiredState.node.location.name, desiredState.node.name) %}
+
+        {# Figure out cluster key #}
+        {% set nsVariables = namespace(finalClusterKey="") %}
+        {% if desiredState.config.clusterKey == true %}
+            {% if desiredState.config.clusterKeyExpressions == true %}
+                {% set column, expression = desiredState.config.clusterKeyConfigExpressions.get('items') | map(attribute='columnNameExpressions.name') | list, desiredState.config.clusterKeyConfigExpressions.get('items') | map(attribute='sqlExpression') | list %}
+
+                {%- set nsVariables = namespace(clusterValues=[]) %}
+
+                {% for r in column %}
+                    {% if expression[loop.index0] == "" %}
+                        {% set nsVariables.clusterValues = nsVariables.clusterValues + [r] %}
+                    {% else %}
+                        {% set nsVariables.clusterValues = nsVariables.clusterValues + [expression[loop.index0]] %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set nsVariables.finalClusterKey = 'CLUSTER BY (' + nsVariables.clusterValues | join(',') + ')' %}
+
+            {% else %}
+
+                {% set column = desiredState.config.clusterKeyConfig.get('items') | map(attribute='columnName.name') | list %}
+
+                {%- set nsVariables = namespace(clusterValues=[]) %}
+
+                {% for r in column %}
+                    {% set nsVariables.clusterValues = nsVariables.clusterValues + [r] %}
+                {% endfor %}
+
+                {% set nsVariables.finalClusterKey = 'CLUSTER BY (' + nsVariables.clusterValues | join(',') + ')' %}
+
+            {% endif %}
+        {% endif %}
+
+        {{ stage('Create Materialized View', true, "sql", "create") }}
+        CREATE OR REPLACE {% if desiredState.config.secureOption %} SECURE {% endif %} MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }}
+        (
+            {% for col in desiredState.columns %}
+                "{{ col.name }}"
+                {%- if col.description | length > 0 %} COMMENT '{{ col.description | escape }}'{% endif %}
+                {%- if not loop.last -%}, {% endif %}
+            {% endfor %}
+        )
+        {%- if desiredState.node.description | length > 0 %} COMMENT = '{{ desiredState.node.description | escape }}'{% endif %}
+        AS
+        {% for source in desiredState.sources %}
+            SELECT {% if desiredState.config.selectDistinct %} DISTINCT {% endif %}
+            {% for col in source.columns %}
+                {{ get_source_transform(col) }} AS "{{ col.name }}"
+                {%- if not loop.last -%}, {% endif %}
+            {% endfor %}
+
+            {{ source.join }}
+
+        {% endfor %}
+
+        {% if desiredState.config.clusterKey == true %}
+            {{ stage('Apply Materialized View Clustering', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }} {{ nsVariables.finalClusterKey }}
+
+            {{ stage('Resume Recluster Materialized View', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }} RESUME RECLUSTER
+        {% endif %}
+
+    {% elif (currentState != undefined) and (alterOnlyTest == true) %}
+
+        {# Desired Materialized View Name #}
+        {% set desiredTargetMaterializedViewDatabase = ref_no_link(desiredState.node.location.name, desiredState.node.name).split('.')[0] %} 
+        {% set desiredTargetMaterializedViewSchema = ref_no_link(desiredState.node.location.name, desiredState.node.name).split('.')[1] %} 
+        {% set desiredFullyQualifiedTargetMaterializedViewName = ref_no_link(desiredState.node.location.name, desiredState.node.name) %}
+        {% set currentFullyQualifiedTargetMaterializedViewName = ref_no_link(currentState.node.location.name, currentState.node.name) %}
+
+        {# Desired Node Name #}
+        {% set desiredNodeName = desiredState.node.name %}
+
+        {# Desired Secure Option #}
+        {% set desiredSecureOption = desiredState.config.secureOption %}
+
+        {# Desired Clustering Key #}
+        {% set desiredClusterKey = finalClusterKey %}
+
+        {# Desired Comment #}
+        {% set desiredNodeComment = desiredState.node.description %}
+
+        {# Current Node Name #}
+        {% set currentNodeName = currentState.node.name %}
+
+        {# Current Secure Option #}
+        {% set currentSecureOption = currentState.config.secureOption %}
+
+        {# Current Comment #}
+        {% set currentNodeComment = currentState.node.description %}
+
+        {# ALTER for Node name #}
+        {% set materializedViewName = '' %}
+        {% if desiredNodeName != currentNodeName %}
+            {% set materializedViewName = 'RENAME TO ' + desiredFullyQualifiedTargetMaterializedViewName %}
+
+            {{ stage('Alter Materialized View - Rename', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ currentFullyQualifiedTargetMaterializedViewName }}
+                {{ materializedViewName }}
+        {% endif %}
+
+        {# Figure out cluster key #}
+        {% set nsVariables = namespace(finalClusterKey="") %}
+        {% if clusterTest == false %}
+            {% if desiredState.config.clusterKeyExpressions == true %}
+                {% set column, expression = desiredState.config.clusterKeyConfigExpressions.get('items') | map(attribute='columnNameExpressions.name') | list, desiredState.config.clusterKeyConfigExpressions.get('items') | map(attribute='sqlExpression') | list %}
+
+                {%- set nsVariables = namespace(clusterValues=[]) %}
+
+                {% for r in column %}
+                    {% if expression[loop.index0] == "" %}
+                        {% set nsVariables.clusterValues = nsVariables.clusterValues + [r] %}
+                    {% else %}
+                        {% set nsVariables.clusterValues = nsVariables.clusterValues + [expression[loop.index0]] %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set nsVariables.finalClusterKey = 'CLUSTER BY (' + nsVariables.clusterValues | join(',') + ')' %}
+
+            {% elif desiredState.config.clusterKey == true %}
+
+                {% set column = desiredState.config.clusterKeyConfig.get('items') | map(attribute='columnName.name') | list %}
+
+                {%- set nsVariables = namespace(clusterValues=[]) %}
+
+                {% for r in column %}
+                    {% set nsVariables.clusterValues = nsVariables.clusterValues + [r] %}
+                {% endfor %}
+
+                {% set nsVariables.finalClusterKey = 'CLUSTER BY (' + nsVariables.clusterValues | join(',') + ')' %}
+            
+            {% else %}
+
+                {% set nsVariables.finalClusterKey = 'DROP CLUSTERING KEY' %}
+
+            {% endif %}
+
+            {{ stage('Recluster Materialized View', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }} 
+            {{ nsVariables.finalClusterKey }}
+
+        {% endif %}
+
+        {# ALTER for Comment #}
+        {%- if desiredNodeComment != currentNodeComment %} 
+            {% set dynamicTableComment = "SET COMMENT = " + "'" + desiredState.node.description + "'" %}
+
+            {{ stage('Alter Materialized View - Comment', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }}
+                {{ dynamicTableComment }}
+        {% endif %}
+
+        {# ALTER for Secure Option #}
+        {% set materializedViewSecureOption = '' %}
+        {% if desiredSecureOption != currentSecureOption %}
+            {% if desiredSecureOption == true %}            
+                {% set materializedViewSecureOption = 'SET SECURE' %}
+            {% else %}
+                {% set materializedViewSecureOption = 'UNSET SECURE' %}
+            {% endif %}
+
+            {{ stage('Alter Materialized View - Secure Option', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }}
+                {{ materializedViewSecureOption }}
+        {% endif %}
+
+        {% if desiredState.config.clusterKey == true %}
+            {{ stage('Resume Recluster Materialized View', true, "sql", "create") }}
+            ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }} RESUME RECLUSTER
+        {% endif %}
+
+    {% else %}
+        {{ stage('Nothing to do.') }}
+        select 1 = 0
+    
+    {% endif %}
+        
+{% elif currentState != undefined and desiredState == undefined %}
+
+    {# Materialized View Name #}
+    {% set targetMaterializedViewDatabase = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[0] %} 
+    {% set targetMaterializedViewSchema = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[1] %} 
+    {% set fullyQualifiedTargetMaterializedViewName = ref_no_link(currentState.node.location.name, currentState.node.name) %}
+
+    {{ stage('Drop Materialized View', true, "sql", "drop") }}
+    DROP MATERIALIZED VIEW IF EXISTS {{ fullyQualifiedTargetMaterializedViewName }}
+
+
+{%- else -%}
+
+{{ stage('Nothing to do.') }}
+select 1 = 0
+
+{% endif %}
