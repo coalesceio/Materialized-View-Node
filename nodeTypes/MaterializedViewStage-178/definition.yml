@@ -1,0 +1,92 @@
+fileVersion: 1
+id: "178"
+isDisabled: false
+metadata:
+  defaultStorageLocation: null
+  error: null
+  nodeMetadataSpec: |-
+    capitalized: Materialized View Stage
+    short: MV
+    tagColor: "#BB8FCE"
+    isDisabled: true
+    plural: Materialized Views
+
+    deployStrategy: advanced
+
+    config:
+      - groupName: Materialized View Options
+        items: 
+        - type: toggleButton
+          attributeName: clusterKey
+          displayName: Cluster Key
+          default: false
+          isRequired: true
+
+        - type: toggleButton
+          attributeName: clusterKeyExpressions
+          displayName: Allow Expressions in Cluster Key
+          default: false
+          isRequired: true
+          enableIf: "{% if config.clusterKey %} true {% else %} false {% endif %}"
+
+    # Cluster Key-determine if a node is to be clustered or not #
+
+        - type: tabular
+          displayName: 'Cluster Key'
+          attributeName: clusterKeyConfig
+          columns:
+      
+          -  type: columnDropdownSelector
+             displayName: Column Name
+             attributeName: columnName
+             isRequired: false
+        
+          isRequired: false
+          enableIf: "{% if (config.clusterKey and not config.clusterKeyExpressions) %} true {% else %} false {% endif %}"
+
+        - type: tabular
+          displayName: 'Cluster Key'
+          attributeName: clusterKeyConfigExpressions
+          columns:
+      
+          -  type: columnDropdownSelector
+             displayName: Column Name
+             attributeName: columnNameExpressions
+             isRequired: false
+        
+          -  type: textBox
+             displayName: Expression
+             attributeName: sqlExpression
+             default: "ex. trunc(<column_name>, -5)"
+             isRequired: false
+        
+          isRequired: false
+          enableIf: "{% if (config.clusterKey and config.clusterKeyExpressions) %} true {% else %} false {% endif %}"
+
+    # Option to create a secured materialized view #
+
+        - type: toggleButton
+          attributeName: secureOption
+          displayName: Secure
+          default: false
+          isRequired: true
+
+      - groupName: General Options
+        items: 
+        - type: toggleButton
+          attributeName: selectDistinct
+          displayName: Distinct
+          default: false
+
+
+      - groupName: Hidden Config
+        enableIf: "false"
+        items:
+        - displayName: Type
+          type: materializationSelector
+          default: Materialized View
+          options:
+          - Materialized View
+          isRequired: false
+name: Materialized View Stage
+type: NodeType
