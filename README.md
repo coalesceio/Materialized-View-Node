@@ -113,3 +113,4 @@ This is executed as a single stage:
 *  [Node definition](https://github.com/coalesceio/Materialized-View-Node/blob/main/nodeTypes/MaterializedViewStage-178/definition.yml)
 *  [Create Template](https://github.com/coalesceio/Materialized-View-Node/blob/main/nodeTypes/MaterializedViewStage-178/create.sql.j2)
 
+[<img src="https://github.com/coalesceio/Materialized-View-Node/assets/7216836/adc00d67-6a90-4bf9-b944-ba723cce461a" alt="Git Logo" height="40">](https://github.com/coalesceio/Materialized-View-Node)
