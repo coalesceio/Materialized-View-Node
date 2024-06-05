@@ -4,25 +4,8 @@ The Coalesce Materialized View Stage UDN is a versatile node that allows you to 
 
 A [materialized view](https://docs.snowflake.com/en/user-guide/views-materialized) is a pre-computed data set derived from a query specification (the SELECT in the view definition) and stored for later use. materialized views can speed up expensive aggregation, projection, and selection operations, especially those that run frequently and that run on large data sets.
 
-## Version Information
- * UDN Name: Materialized View Stage
- * Package Name: 
-
- * Certified Version: 1.0
- * Documentation Version: 1.0
- * Current Version: 1.0
- * Originally Developed by: John Gontarz
- * Current Owner: John Gontarz
- * Materialization Type: Materialized View
- * Create Template: Yes
- * Run Template: No
-
- * Deployment Strategy: Advanced
- * Deployment Method: ALTER when possible otherwise CREATE OR REPLACE
-
- * Test Enabled: No
-
 ## Node Configuration
+
 The Materialized View Stage has three configuration groups:
 
 * [Node Properties](#node-properties)
@@ -43,13 +26,13 @@ There are four configs within the **Node Properties** group.
 
 There are two configs within the **Materialized View Options** group.
 
-* **Cluster key**: True/False to determine whether Materialized view is to be clustered or not
+* **Cluster key**: True/False to determine whether Materialized view is to be clustered or not.
     * True – Allows you to be specify the column based on which clustering is to be done.
-           -Allow Expressions Cluster Key-True ->allows to add an expression to the specified cluster key
-    * False – No clustering done
-* **Secure**: True / False Toggle to determine whether Materialized view to be created in a secured mode
-    * True – Materialized view created in a secured mode
-    * False – No additional secure option added during Materialized view creation
+	    * Allow Expressions Cluster Key: True. Allows to add an expression to the specified cluster key.
+	    * False: No clustering done.
+* **Secure**: True / False Toggle to determine whether Materialized view to be created in a secured mode.
+    * True – Materialized view created in a secured mode.
+    * False – No additional secure option added during Materialized view creation.
 
 ### General Options
 
@@ -57,13 +40,13 @@ There are two configs within the **Materialized View Options** group.
   
 ## Limitations of Materialized view
 
-Materialized view has a set of limitations as listed here
+Materialized view has a set of limitations:
 
 * A materialized view cannot query a materialized or non-materialized view
 * A materialized view does not support group by all but group by is supported
 * A materialized view can query only a single table.
 
-This link provides insights on more [limitations](https://docs.snowflake.com/en/user-guide/views-materialized#limitations-on-creating-materialized-views).
+Review [Snowflake's Limitations on Creating Materialized Views](https://docs.snowflake.com/en/user-guide/views-materialized#limitations-on-creating-materialized-views).
 
 ## Deployment
 
@@ -86,7 +69,7 @@ After the Materialized View has deployed for the first time into a target enviro
 If a Materialized View is to be altered this will run the following stage:
 
 * **Alter Materialized View**
-  * This stage will execute an ALTER statement and alter the Materialized View in the target environment setting the new parameters.
+This stage will execute an ALTER statement and alter the Materialized View in the target environment setting the new parameters.
   
 #### Altering the Materialized View
   
@@ -108,7 +91,7 @@ This is executed as a single stage:
 
 * Drop Materialized View
 
-# Code
+## Code
 
 *  [Node definition](https://github.com/coalesceio/Materialized-View-Node/blob/main/nodeTypes/MaterializedViewStage-178/definition.yml)
 *  [Create Template](https://github.com/coalesceio/Materialized-View-Node/blob/main/nodeTypes/MaterializedViewStage-178/create.sql.j2)
