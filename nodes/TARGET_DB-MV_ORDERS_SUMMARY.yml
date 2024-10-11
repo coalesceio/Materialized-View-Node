@@ -67,7 +67,7 @@ operation:
         join:
           joinCondition: |-
             FROM {{ ref('SOURCE_DATA', 'ORDERS') }} "ORDERS"
-            group by "ORDERS"."C_CUSTKEY"
+            group by "ORDERS"."O_CUSTKEY"
         name: MV_ORDERS_SUMMARY
         noLinkRefs: []
   name: MV_ORDERS_SUMMARY
