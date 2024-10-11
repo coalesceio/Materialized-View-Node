@@ -6,7 +6,12 @@ operation:
     clusterKey: true
     clusterKeyConfig:
       items:
-        - {}
+        - columnName:
+            columnCounter: 3601f6b0-f686-4ca4-af3d-b7c30f213d23
+            stepCounter: a09b5a2b-74be-4786-a342-baa563894b70
+        - columnName:
+            columnCounter: 53ce1fe9-986c-4fb0-9ee5-4b3ff0abd05d
+            stepCounter: a09b5a2b-74be-4786-a342-baa563894b70
     clusterKeyConfigExpressions:
       items:
         - {}

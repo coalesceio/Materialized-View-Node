@@ -6,13 +6,19 @@ operation:
     clusterKey: true
     clusterKeyConfig:
       items:
-        - columnName:
-            columnCounter: 6a5e1f96-722a-4fc5-90bf-427f0056e368
-            stepCounter: 0f2cb38c-26a0-4c61-8af5-1cba17862781
+        - {}
+        - {}
     clusterKeyConfigExpressions:
       items:
-        - {}
-    clusterKeyExpressions: false
+        - columnNameExpressions:
+            columnCounter: f6638f2a-13a4-45df-9ea4-da91ba8f5fed
+            stepCounter: 0f2cb38c-26a0-4c61-8af5-1cba17862781
+          sqlExpression: ""
+        - columnNameExpressions:
+            columnCounter: 6a5e1f96-722a-4fc5-90bf-427f0056e368
+            stepCounter: 0f2cb38c-26a0-4c61-8af5-1cba17862781
+          sqlExpression: trunc("MENU_TYPE", -5)
+    clusterKeyExpressions: true
     secureOption: true
     selectDistinct: false
   database: ""
@@ -68,7 +74,7 @@ operation:
           - columnReferences:
               - columnCounter: 62cd4a85-a267-47b8-8788-aa30cfc642a9
                 stepCounter: 5d44ee15-a9ee-4bc5-9c4c-8880ffa0ba14
-            transform: SUM("WRK_MENU_EXT"."SALE_PRICE_USD")
+            transform: SUM("MENU_EXT"."SALE_PRICE_USD")
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
