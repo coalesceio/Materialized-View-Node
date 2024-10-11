@@ -20,13 +20,13 @@ metadata:
           attributeName: clusterKey
           displayName: Cluster Key
           default: false
-          isRequired: true
+          isRequired: false
 
         - type: toggleButton
           attributeName: clusterKeyExpressions
           displayName: Allow Expressions in Cluster Key
           default: false
-          isRequired: true
+          isRequired: false
           enableIf: "{% if config.clusterKey %} true {% else %} false {% endif %}"
 
     # Cluster Key-determine if a node is to be clustered or not #
@@ -69,7 +69,7 @@ metadata:
           attributeName: secureOption
           displayName: Secure
           default: false
-          isRequired: true
+          isRequired: false
 
       - groupName: General Options
         items: 
