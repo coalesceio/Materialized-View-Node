@@ -81,7 +81,7 @@ select 1 = 0
                 {% if loop.first %}
                     {% set nsVariables.nsDesiredDepStorageLocations = depSourceLocation %}
                 {% else %}
-                    {% set nsVariables.nnsDesiredDepStorageLocations = nsVariables.nsDesiredDepStorageLocations + ',' + depSourceLocation %}
+                    {% set nsVariables.nsDesiredDepStorageLocations = nsVariables.nsDesiredDepStorageLocations + ',' + depSourceLocation %}
                 {% endif %}
             {% endfor %}
             
