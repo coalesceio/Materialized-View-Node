@@ -62,11 +62,13 @@ select 1 = 0
 
         {% set desiredStorageLocations = (nsVariables.nsDesiredUsedStorageLocations).split(',') | list %}
         {% set desiredUniqueStorageLocations = desiredStorageLocations | unique | sort | list %}
+        {% set currentstoragelocations = currentState.storageLocations | map (attribute='name') | list%}
 
         {# Test  #}
-
+        
         {% for name in desiredUniqueStorageLocations if nsVariables.storageLocationTest == true %}
             {# Current mappings #}
+            
              {%if currentState.storageLocations|length == 0%}
               
               {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | string %}
@@ -83,7 +85,8 @@ select 1 = 0
             {% set desiredDatabase = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
             {% set desiredSchema = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
             {% set desiredDatabaseSchema = desiredDatabase + '.' + desiredSchema %}
-
+             {{desiredDatabaseSchema}}
+             {{currentDatabaseSchema}}
             {% if currentDatabaseSchema != desiredDatabaseSchema %}
                 {% set nsVariables.storageLocationTest = false %}
             {% endif %}
@@ -102,14 +105,14 @@ select 1 = 0
             columnsTransformTest == false or
             nsVariables.storageLocationTest == false or 
             selectDistinctTest == false or 
-            nodeMaterializationType == false  or currentState.node.location != desiredState.node.location%}    
+            nodeMaterializationType == false  %}    
 
             {% set createTest = true %}
         {% else %}
             {% set createTest = false %}
         {% endif %}
     {% endif %}
-    
+
     {# Identify config changes that would only result in ALTER #}
     {% if createTest == false %}
         {% set nodeNameTest = currentState.node.name == desiredState.node.name %}
@@ -139,7 +142,7 @@ select 1 = 0
             nodeNameTest == false or
             clusterTest == false or
             secureOptionTest == false or
-            nodeCommentTest == false %}    
+            nodeCommentTest == false or currentState.node.location.name != desiredState.node.location.name %}    
 
             {% set alterOnlyTest = true %}
         {% else %}
@@ -250,10 +253,10 @@ select 1 = 0
 
         {# ALTER for Node name #}
         {% set materializedViewName = '' %}
-        {% if desiredNodeName != currentNodeName %}
+        {% if desiredNodeName != currentNodeName or currentState.node.location.name != desiredState.node.location.name%}
             {% set materializedViewName = 'RENAME TO ' + desiredFullyQualifiedTargetMaterializedViewName %}
 
-            {{ stage('Alter Materialized View - Rename', true, "sql", "create") }}
+            {{ stage('Alter Materialized View - Rename/Move', true, "sql", "create") }}
             ALTER MATERIALIZED VIEW {{ currentFullyQualifiedTargetMaterializedViewName }}
                 {{ materializedViewName }}
         {% endif %}
