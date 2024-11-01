@@ -23,7 +23,7 @@ operation:
     selectDistinct: false
   database: ""
   deployEnabled: true
-  description: ""
+  description: This is a menu item sale materialized view
   isMultisource: false
   locationName: TARGET_DB
   materializationType: Materialized View
