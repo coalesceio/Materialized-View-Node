@@ -6,7 +6,7 @@ mappingDefinitions:
     schema: SOURCE_DATA
   TARGET_ACC:
     database: ANANDHIS_DEV
-    schema: TARGET_ACC
+    schema: ACC_QA
   TARGET_DB:
     database: ANANDHIS_DEV
     schema: TARGET_QA
