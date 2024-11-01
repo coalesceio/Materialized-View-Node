@@ -104,6 +104,7 @@ select 1 = 0
             joinTest == false or
             columnsTransformTest == false or
             selectDistinctTest == false or 
+            nsVariables.storageLocationTest == false or
             nodeMaterializationType == false  %}    
 
             {% set createTest = true %}
@@ -142,7 +143,7 @@ select 1 = 0
             clusterTest == false or
             secureOptionTest == false or
             nodeCommentTest == false or 
-            nsVariables.storageLocationTest == false or currentState.node.location.name != desiredState.node.location.name %}    
+            currentState.node.location.name != desiredState.node.location.name %}    
 
             {% set alterOnlyTest = true %}
         {% else %}
@@ -253,7 +254,7 @@ select 1 = 0
 
         {# ALTER for Node name #}
         {% set materializedViewName = '' %}
-        {% if desiredNodeName != currentNodeName or nsVariables.storageLocationTest == false or  currentState.node.location.name != desiredState.node.location.name%}
+        {% if desiredNodeName != currentNodeName or  currentState.node.location.name != desiredState.node.location.name%}
             {% set materializedViewName = 'RENAME TO ' + desiredFullyQualifiedTargetMaterializedViewName %}
 
             {{ stage('Alter Materialized View - Rename/Move', true, "sql", "create") }}
