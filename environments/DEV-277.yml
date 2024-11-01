@@ -9,7 +9,7 @@ mappingDefinitions:
     schema: TARGET_ACC
   TARGET_DB:
     database: ANANDHIS_DEV
-    schema: TARGET_QA
+    schema: TARGET_ACC
   TARGET_DEV:
     database: ANANDHIS_DEV
     schema: TARGET_QA
