@@ -9,8 +9,10 @@ operation:
         - {}
     clusterKeyConfigExpressions:
       items:
-        - columnNameExpressions: null
-          sqlExpression: ex. trunc(<column_name>, -5)
+        - columnNameExpressions:
+            columnCounter: 73b4dd48-f16a-43f9-b6b1-77aec3579997
+            stepCounter: a5dbb216-aa0d-4f34-bcc0-3998ff87955f
+          sqlExpression: trunc("L_PARTKEY", -5)
     clusterKeyExpressions: true
     secureOption: false
     selectDistinct: false
