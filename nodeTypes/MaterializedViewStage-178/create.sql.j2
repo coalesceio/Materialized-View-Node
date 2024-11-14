@@ -33,48 +33,72 @@ select 1 = 0
         {% set columnsTransformTest = currentTransformArray == desiredTransformArray %}
 
         {# Storage Location Tests #}
-        {# Only need to account for updated Storage Location mappings   #}
-        {# sourceTest handles changed Storage Location Names #}
-        {# Desired Namespace Variables #}
-        {% set nsVariables = namespace(nsDesiredDepStorageLocations="",nsDesiredSourceStorageLocations="",nsDesiredTargetStorageLocations="",nsDesiredUsedStorageLocations="",storageLocationTest=true) %}
-      
-        {# Desired State Storage Location Info #}
-        {% for source in desiredState.sources %}
-            {% for dep in source.dependencies %}
-                {% set depSourceLocation = dep.node.location.name %}
+        {# Storage Location Tests #}
+        {# Only need to account for updated Storage Location mappings   #}     
+        {# Current and Desired Namespace Variables initialisation #}
+
+            {% set nsVariables = namespace(nsCurrentDepStorageLocations="",nsCurrentSourceStorageLocations="",nsCurrentTargetStorageLocations="",nsCurrentUsedStorageLocations="",nsDesiredDepStorageLocations="",nsDesiredSourceStorageLocations="",nsDesiredTargetStorageLocations="",nsDesiredUsedStorageLocations="",storageLocationTest=true) %}
+
+            {# Current State Storage Location Info #}
+            {% for source in currentState.sources %}
+                {% for dep in source.dependencies %}
+                    {% set depSourceLocation = dep.node.location.name %}
+                    {% if loop.first %}
+                        {% set nsVariables.nsCurrentDepStorageLocations = depSourceLocation %}
+                    {% else %}
+                        {% set nsVariables.nsCurrentDepStorageLocations = nsVariables.nsCurrentDepStorageLocations + ',' + depSourceLocation %}
+                    {% endif %}
+                {% endfor %}
+                
                 {% if loop.first %}
-                    {% set nsVariables.nsDesiredDepStorageLocations = depSourceLocation %}
+                    {% set nsVariables.nsCurrentSourceStorageLocations = nsVariables.nsCurrentDepStorageLocations %}
                 {% else %}
-                    {% set nsVariables.nsDesiredDepStorageLocations = nsVariables.nsDesiredDepStorageLocations + ',' + depSourceLocation %}
+                    {% set nsVariables.nsCurrentSourceStorageLocations = nsVariables.nsCurrentSourceStorageLocations + ',' + nsVariables.nsCurrentDepStorageLocations %}
                 {% endif %}
             {% endfor %}
+
+            {% set nsVariables.nsCurrentTargetStorageLocations = currentState.node.location.name  %}
+
+            {% set nsVariables.nsCurrentUsedStorageLocations = nsVariables.nsCurrentSourceStorageLocations + ',' + nsVariables.nsCurrentTargetStorageLocations %}
+
+            {% set currentStorageLocations = (nsVariables.nsCurrentUsedStorageLocations).split(',') | list %}
+            {% set currentUniqueStorageLocations = currentStorageLocations | unique | sort | list %}
+
+            {# Desired State Storage Location Info #}
+            {% for source in desiredState.sources %}
+                {% for dep in source.dependencies %}
+                    {% set depSourceLocation = dep.node.location.name %}
+                    {% if loop.first %}
+                        {% set nsVariables.nsDesiredDepStorageLocations = depSourceLocation %}
+                    {% else %}
+                        {% set nsVariables.nsDesiredDepStorageLocations = nsVariables.nsDesiredDepStorageLocations + ',' + depSourceLocation %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if loop.first %}
+                    {% set nsVariables.nsDesiredSourceStorageLocations = nsVariables.nsDesiredDepStorageLocations %}
+                {% else %}
+                    {% set nsVariables.nsDesiredSourceStorageLocations = nsVariables.nsDesiredSourceStorageLocations + ',' + nsVariables.nsDesiredDepStorageLocations %}
+                {% endif %}
+            {% endfor %}
+
+            {% set nsVariables.nsDesiredTargetStorageLocations = desiredState.node.location.name  %}
+
+            {% set nsVariables.nsDesiredUsedStorageLocations = nsVariables.nsDesiredSourceStorageLocations + ',' + nsVariables.nsDesiredTargetStorageLocations %}
+
+            {% set desiredStorageLocations = (nsVariables.nsDesiredUsedStorageLocations).split(',') | list %}
+            {% set desiredUniqueStorageLocations = desiredStorageLocations | unique | sort | list %}
+
+            {# Test  #}
             
-            {% if loop.first %}
-                {% set nsVariables.nsDesiredSourceStorageLocations = nsVariables.nsDesiredDepStorageLocations %}
-            {% else %}
-                {% set nsVariables.nsDesiredSourceStorageLocations = nsVariables.nsDesiredSourceStorageLocations + ',' + nsVariables.nsDesiredDepStorageLocations %}
-            {% endif %}
-        {% endfor %}
-
-        {% set nsVariables.nsDesiredTargetStorageLocations = desiredState.node.location.name  %}
-
-        {% set nsVariables.nsDesiredUsedStorageLocations = nsVariables.nsDesiredSourceStorageLocations + ',' + nsVariables.nsDesiredTargetStorageLocations %}
-
-        {% set desiredStorageLocations = (nsVariables.nsDesiredUsedStorageLocations).split(',') | list %}
-        {% set desiredUniqueStorageLocations = desiredStorageLocations | unique | sort | list %}
-        {% set currentstoragelocations = currentState.storageLocations | map (attribute='name') | list%}
-
-        {# Test  #}
-        
-        {% for name in desiredUniqueStorageLocations if nsVariables.storageLocationTest == true %}
-            {# Current mappings #}
-            
-             {%if currentState.storageLocations|length == 0%}
+            {% for name in desiredUniqueStorageLocations if nsVariables.storageLocationTest == true %}
+                {# Current mappings #}
+                 {%if currentState.storageLocations|length == 0%}
               
               {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | string %}
               {% set currentSchema = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | string %}
                {% set currentDatabaseSchema = currentDatabase + '.' + currentSchema %}
-            {%elif name in currentstoragelocations %}
+            {%elif name in currentUniqueStorageLocations %}
             
                 {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
                 {% set currentSchema = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
@@ -84,14 +108,13 @@ select 1 = 0
             {# Desired mappings #}
             {% set desiredDatabase = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
             {% set desiredSchema = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
-            {% set desiredDatabaseSchema = desiredDatabase + '.' + desiredSchema %}
+            {% set desiredDatabaseSchema = desiredDatabase + '.' + desiredSchema %}           
             
-            
-            {% if currentDatabaseSchema != desiredDatabaseSchema %}
+             {% if currentDatabaseSchema != desiredDatabaseSchema %}
                 {% set nsVariables.storageLocationTest = false %}
-            {% endif %}
-        {% endfor %}
-
+             {% endif %}
+            {% endfor %}
+            
         {# Config #}
         {% set selectDistinctTest = currentState.config.selectDistinct == desiredState.config.selectDistinct %}
 
@@ -254,10 +277,10 @@ select 1 = 0
 
         {# ALTER for Node name #}
         {% set materializedViewName = '' %}
-        {% if desiredNodeName != currentNodeName or  currentState.node.location.name != desiredState.node.location.name%}
+        {% if desiredNodeName != currentNodeName%}
             {% set materializedViewName = 'RENAME TO ' + desiredFullyQualifiedTargetMaterializedViewName %}
 
-            {{ stage('Alter Materialized View - Rename/Move', true, "sql", "create") }}
+            {{ stage('Alter Materialized View - Rename', true, "sql", "create") }}
             ALTER MATERIALIZED VIEW {{ currentFullyQualifiedTargetMaterializedViewName }}
                 {{ materializedViewName }}
         {% endif %}
@@ -306,11 +329,10 @@ select 1 = 0
 
         {# ALTER for Comment #}
         {%- if desiredNodeComment != currentNodeComment %} 
-            {% set dynamicTableComment = "SET COMMENT = " + "'" + desiredState.node.description + "'" %}
-
+        
             {{ stage('Alter Materialized View - Comment', true, "sql", "create") }}
             ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }}
-                {{ dynamicTableComment }}
+                SET COMMENT = '{{ desiredState.node.description | escape }}'
         {% endif %}
 
         {# ALTER for Secure Option #}
