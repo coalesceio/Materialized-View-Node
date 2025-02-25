@@ -79,6 +79,10 @@ There are two config changes that if made in isolation or all-together will resu
 
 If anything changes other than the configuration options specified above then the Materialized View will be recreated by running a CREATE OR REPLACE statement.
 
+### Redeployment with no changes 
+
+If the nodes are redeployed with no changes compared to previous deployment,then no stages are executed
+
 ### Undeployment
 
 If a Materialized View is deleted from a Workspace, that Workspace is committed to Git and that commit deployed to a higher-level environment then the Materialized View in the target environment will be dropped.
