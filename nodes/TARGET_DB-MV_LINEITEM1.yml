@@ -279,7 +279,7 @@ operation:
   name: MV_LINEITEM1
   overrideSQL: false
   schema: ""
-  sqlType: mv:::178
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
