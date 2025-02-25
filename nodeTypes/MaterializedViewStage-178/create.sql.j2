@@ -14,12 +14,7 @@ does not permit copying or modification for any other purpose.
 {#Release date:20241114  Version:1.1.3 Released By:AS  Description: Node Description / Comments #}
 
 
-{% if desiredState == currentState %}
-
-{{ stage('Nothing to do.') }}
-select 1 = 0
-
-{% elif desiredState %}
+{% if desiredState %}
     {# Identify all config changes that would cause a CREATE instead of ALTER #}
     {% if currentState != undefined %} 
         {# General metadata #}
@@ -374,10 +369,5 @@ select 1 = 0
     {{ stage('Drop Materialized View', true, "sql", "drop") }}
     DROP MATERIALIZED VIEW IF EXISTS {{ fullyQualifiedTargetMaterializedViewName }}
 
-
-{%- else -%}
-
-{{ stage('Nothing to do.') }}
-select 1 = 0
 
 {% endif %}

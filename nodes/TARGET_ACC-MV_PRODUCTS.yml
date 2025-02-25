@@ -38,20 +38,6 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 065ee04e-8cc2-45c7-b269-7141e6059d02
-          stepCounter: c362d1d9-ece3-4b12-87e6-ce2662fde02f
-        config: {}
-        dataType: VARCHAR(255)
-        description: ""
-        name: PRODUCT_NAME
-        nullable: true
-        sourceColumnReferences:
-          - columnReferences:
-              - columnCounter: a0f947fb-22b1-4dd3-8aee-2e62978065df
-                stepCounter: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
-            transform: ""
-      - appliedColumnTests: {}
-        columnReference:
           columnCounter: cf005074-c125-4ac3-be4b-391ae3b7a159
           stepCounter: c362d1d9-ece3-4b12-87e6-ce2662fde02f
         config: {}
@@ -78,6 +64,25 @@ operation:
               - columnCounter: 2063390b-3d9b-4106-8229-884e6ab6036e
                 stepCounter: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
             transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 065ee04e-8cc2-45c7-b269-7141e6059d02
+          stepCounter: c362d1d9-ece3-4b12-87e6-ce2662fde02f
+        config: {}
+        dataType: VARCHAR(255)
+        defaultValue: ""
+        description: ""
+        name: PRODUCT_NAME
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
