@@ -3,7 +3,6 @@ id: 62ba8669-6793-416b-872b-285dfa40c567
 name: ORDERS
 operation:
   database: ""
-  dataset: ""
   deployEnabled: true
   description: ""
   locationName: SOURCE_DATA
@@ -159,12 +158,9 @@ operation:
         nullable: true
         primaryKey: false
         uniqueKey: false
-    join:
-      joinCondition: FROM {{ ref('SOURCE_DATA', 'ORDERS') }}
   name: ORDERS
   schema: ""
   sqlType: Source
-  table: ORDERS
   type: sourceInput
   version: 1
 type: Node

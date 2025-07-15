@@ -238,10 +238,10 @@ does not permit copying or modification for any other purpose.
         {% endfor %}
 
         {% if desiredState.config.clusterKey == true %}
-            {{ stage('Apply Materialized View Clustering', true, "sql", "create") }}
+            {{ stage('Apply Materialized View Clustering') }}
             ALTER MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }} {{ nsVariables.finalClusterKey }}
 
-            {{ stage('Resume Recluster Materialized View', true, "sql", "create") }}
+            {{ stage('Resume Recluster Materialized View') }}
             ALTER MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }} RESUME RECLUSTER
         {% endif %}
 
@@ -279,7 +279,7 @@ does not permit copying or modification for any other purpose.
         {% if desiredNodeName != currentNodeName%}
             {% set materializedViewName = 'RENAME TO ' + desiredFullyQualifiedTargetMaterializedViewName %}
 
-            {{ stage('Alter Materialized View - Rename', true, "sql", "create") }}
+            {{ stage('Alter Materialized View - Rename') }}
             ALTER MATERIALIZED VIEW {{ currentFullyQualifiedTargetMaterializedViewName }}
                 {{ materializedViewName }}
         {% endif %}
@@ -320,7 +320,7 @@ does not permit copying or modification for any other purpose.
 
             {% endif %}
 
-            {{ stage('Recluster Materialized View', true, "sql", "create") }}
+            {{ stage('Recluster Materialized View') }}
             ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }} 
             {{ nsVariables.finalClusterKey }}
 
@@ -329,7 +329,7 @@ does not permit copying or modification for any other purpose.
         {# ALTER for Comment #}
         {%- if desiredNodeComment != currentNodeComment %} 
         
-            {{ stage('Alter Materialized View - Comment', true, "sql", "create") }}
+            {{ stage('Alter Materialized View - Comment') }}
             ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }}
                 SET COMMENT = '{{ desiredState.node.description | escape }}'
         {% endif %}
@@ -343,13 +343,13 @@ does not permit copying or modification for any other purpose.
                 {% set materializedViewSecureOption = 'UNSET SECURE' %}
             {% endif %}
 
-            {{ stage('Alter Materialized View - Secure Option', true, "sql", "create") }}
+            {{ stage('Alter Materialized View - Secure Option') }}
             ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }}
                 {{ materializedViewSecureOption }}
         {% endif %}
 
         {% if desiredState.config.clusterKey == true %}
-            {{ stage('Resume Recluster Materialized View', true, "sql", "create") }}
+            {{ stage('Resume Recluster Materialized View') }}
             ALTER MATERIALIZED VIEW {{ desiredFullyQualifiedTargetMaterializedViewName }} RESUME RECLUSTER
         {% endif %}
 
@@ -366,7 +366,7 @@ does not permit copying or modification for any other purpose.
     {% set targetMaterializedViewSchema = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[1] %} 
     {% set fullyQualifiedTargetMaterializedViewName = ref_no_link(currentState.node.location.name, currentState.node.name) %}
 
-    {{ stage('Drop Materialized View', true, "sql", "drop") }}
+    {{ stage('Drop Materialized View') }}
     DROP MATERIALIZED VIEW IF EXISTS {{ fullyQualifiedTargetMaterializedViewName }}
 
 

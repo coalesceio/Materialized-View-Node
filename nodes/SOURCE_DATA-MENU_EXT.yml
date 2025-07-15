@@ -3,7 +3,6 @@ id: 5d44ee15-a9ee-4bc5-9c4c-8880ffa0ba14
 name: MENU_EXT
 operation:
   database: ""
-  dataset: ""
   deployEnabled: true
   description: ""
   locationName: SOURCE_DATA
@@ -189,12 +188,9 @@ operation:
         nullable: true
         primaryKey: false
         uniqueKey: false
-    join:
-      joinCondition: FROM {{ ref('SOURCE_DATA', 'MENU_EXT') }}
   name: MENU_EXT
   schema: ""
   sqlType: Source
-  table: MENU_EXT
   type: sourceInput
   version: 1
 type: Node

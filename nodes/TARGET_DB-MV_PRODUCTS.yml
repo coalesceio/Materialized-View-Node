@@ -17,7 +17,7 @@ operation:
   deployEnabled: true
   description: ""
   isMultisource: false
-  locationName: TARGET_ACC
+  locationName: TARGET_DB
   materializationType: Materialized View
   metadata:
     appliedNodeTests: []
