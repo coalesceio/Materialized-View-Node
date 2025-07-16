@@ -160,7 +160,7 @@ does not permit copying or modification for any other purpose.
             {% endif %}
         {% endif %}
 
-        {{ stage('Create Materialized View') }}
+        {{ stage('Create Materialized View',true, "sql", "create") }}
         CREATE OR REPLACE {% if desiredState.config.secureOption %} SECURE {% endif %} MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }}
         (
             {% for col in desiredState.columns %}
@@ -183,10 +183,10 @@ does not permit copying or modification for any other purpose.
         {% endfor %}
 
         {% if desiredState.config.clusterKey == true %}
-            {{ stage('Apply Materialized View Clustering') }}
+            {{ stage('Apply Materialized View Clustering', true, "sql", "create") }}
             ALTER MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }} {{ nsVariables.finalClusterKey }}
 
-            {{ stage('Resume Recluster Materialized View') }}
+            {{ stage('Resume Recluster Materialized View', true, "sql", "create") }}
             ALTER MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }} RESUME RECLUSTER
         {% endif %}
 
