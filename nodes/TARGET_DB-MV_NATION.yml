@@ -1,32 +1,24 @@
 fileVersion: 1
 id: 7e218cf6-e87a-4a0a-a755-2b4e4190b9c6
-name: WRK_NATION
+name: MV_NATION
 operation:
   config:
-    asofColumn:
+    clusterKey: false
+    clusterKeyConfig:
       items:
         - {}
-    asofJoin: true
-    asofJoinMain: false
-    asofJoinON: false
-    asofJoinUSING: false
-    groupByAll: false
-    insertStrategy: INSERT
-    orderby: false
-    orderbycolumn:
+    clusterKeyConfigExpressions:
       items:
         - {}
-    postSQL: ""
-    preSQL: ""
+    clusterKeyExpressions: false
+    secureOption: false
     selectDistinct: false
-    testsEnabled: false
-    truncateBefore: true
   database: ""
   deployEnabled: true
   description: Nation data as defined by TPC-H
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -98,12 +90,12 @@ operation:
             nodeName: NATION
         join:
           joinCondition: FROM  {{ ref('SOURCE_DATA', 'NATION') }} NATION
-        name: WRK_NATION
+        name: MV_NATION
         noLinkRefs: []
-  name: WRK_NATION
+  name: MV_NATION
   overrideSQL: false
   schema: ""
-  sqlType: base-node-types:::204
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
