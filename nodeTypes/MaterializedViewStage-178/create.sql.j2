@@ -307,8 +307,9 @@ does not permit copying or modification for any other purpose.
     {% set targetMaterializedViewSchema = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[1] %} 
     {% set fullyQualifiedTargetMaterializedViewName = ref_no_link(currentState.node.location.name, currentState.node.name) %}
 
-    {{ stage('Drop Materialized View') }}
-    DROP MATERIALIZED VIEW IF EXISTS {{ fullyQualifiedTargetMaterializedViewName }}
+    {{ stage('Drop ' + currentState.node.materializationType ) }}
+    {%- set materialization = dropMaterialization(currentState.node.materializationType) -%}
+    DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
 
 
 {% endif %}

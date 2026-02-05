@@ -1,10 +1,10 @@
 fileVersion: 1
-id: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
-name: PRODUCTS
+id: c6a1050d-78fd-49db-8173-958bc2f2abc7
+name: NATION
 operation:
   database: ""
   deployEnabled: true
-  description: ""
+  description: Nation data as defined by TPC-H
   locationName: SOURCE_DATA
   metadata:
     columns:
@@ -13,33 +13,14 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: f0fcaede-1a74-441d-b053-6730a548a0f9
-          stepCounter: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
+          columnCounter: 2c97bcd8-0b00-4c25-867d-b7accb4113c3
+          stepCounter: c6a1050d-78fd-49db-8173-958bc2f2abc7
         config: {}
         dataType: NUMBER(38,0)
         defaultValue: ""
         description: ""
-        name: PRODUCT_ID
+        name: N_NATIONKEY
         nullable: false
-        primaryKey: true
-        sourceColumnReferences:
-          - columnReferences: []
-            transform: ""
-        transform: ""
-        uniqueKey: false
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: a0f947fb-22b1-4dd3-8aee-2e62978065df
-          stepCounter: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
-        config: {}
-        dataType: VARCHAR(255)
-        defaultValue: ""
-        description: ""
-        name: PRODUCT_NAME
-        nullable: true
         primaryKey: false
         sourceColumnReferences:
           - columnReferences: []
@@ -51,14 +32,14 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 2f00739a-664b-477a-8e22-1b9cd3523162
-          stepCounter: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
+          columnCounter: 95fa2164-6d33-4b44-b46f-50e7730f4abc
+          stepCounter: c6a1050d-78fd-49db-8173-958bc2f2abc7
         config: {}
-        dataType: VARCHAR(100)
+        dataType: VARCHAR(25)
         defaultValue: ""
         description: ""
-        name: BRAND
-        nullable: true
+        name: N_NAME
+        nullable: false
         primaryKey: false
         sourceColumnReferences:
           - columnReferences: []
@@ -70,13 +51,32 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 2063390b-3d9b-4106-8229-884e6ab6036e
-          stepCounter: 0e8d26fa-a872-434e-b604-6d77f1f5f33f
+          columnCounter: 690c395b-7d0a-42fe-8276-89d614a270a7
+          stepCounter: c6a1050d-78fd-49db-8173-958bc2f2abc7
         config: {}
-        dataType: VARCHAR(50)
+        dataType: NUMBER(38,0)
         defaultValue: ""
         description: ""
-        name: COLOUR
+        name: N_REGIONKEY
+        nullable: false
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 626c89d4-f64c-42c7-83e2-30d729edb0de
+          stepCounter: c6a1050d-78fd-49db-8173-958bc2f2abc7
+        config: {}
+        dataType: VARCHAR(152)
+        defaultValue: ""
+        description: ""
+        name: N_COMMENT
         nullable: true
         primaryKey: false
         sourceColumnReferences:
@@ -84,7 +84,7 @@ operation:
             transform: ""
         transform: ""
         uniqueKey: false
-  name: PRODUCTS
+  name: NATION
   schema: ""
   sqlType: Source
   type: sourceInput
