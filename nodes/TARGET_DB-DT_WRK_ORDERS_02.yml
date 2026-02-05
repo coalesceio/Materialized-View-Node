@@ -1,12 +1,8 @@
 fileVersion: 1
 id: 81f78770-5fb4-4846-b610-1183ee558161
-name: DT_WRK_ORDERS
+name: DT_WRK_ORDERS_02
 operation:
   config:
-    advanceWarehouse: false
-    backfill: false
-    backfillSource: ""
-    backfillSourceSchema: ""
     clusterKey: true
     clusterKeyConfig:
       items:
@@ -17,32 +13,14 @@ operation:
       items:
         - {}
     clusterKeyExpressions: false
-    cpygrants: false
-    downstreamOption: false
-    groupByAll: false
-    immutabilityConstraint: false
-    immutableExpression: ""
-    initialize: ON_CREATE
-    initializeWarehouseSize: ""
-    insertStrategy: UNION ALL
-    lagSpecification:
-      items:
-        - lagPeriod: Minutes
-          lagValue: "60"
-    refreshWarehouseSize: ""
-    refresh_mode: AUTO
+    secureOption: false
     selectDistinct: false
-    timeTravel: false
-    timeTravelreference: ""
-    timeTraveltype: ""
-    timeTravelvalue: ""
-    warehouseName: COMPUTE_WH
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: dynamic table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -114,12 +92,12 @@ operation:
             nodeName: ORDERS
         join:
           joinCondition: FROM {{ ref('SOURCE_DATA', 'ORDERS') }} "ORDERS"
-        name: DT_WRK_ORDERS
+        name: DT_WRK_ORDERS_02
         noLinkRefs: []
-  name: DT_WRK_ORDERS
+  name: DT_WRK_ORDERS_02
   overrideSQL: false
   schema: ""
-  sqlType: dynamic-tables:::347
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
