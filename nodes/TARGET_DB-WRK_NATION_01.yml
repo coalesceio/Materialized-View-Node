@@ -1,31 +1,39 @@
 fileVersion: 1
-id: f53e93da-ca1e-4811-9562-2f349aaead0d
-name: WRK_NATION1
+id: 47db0215-0ca9-42ba-abec-c36dca35a8c7
+name: WRK_NATION_01
 operation:
   config:
-    clusterKey: false
-    clusterKeyConfig:
+    asofColumn:
       items:
         - {}
-    clusterKeyConfigExpressions:
+    asofJoin: true
+    asofJoinMain: false
+    asofJoinON: false
+    asofJoinUSING: false
+    groupByAll: false
+    insertStrategy: INSERT
+    orderby: false
+    orderbycolumn:
       items:
         - {}
-    clusterKeyExpressions: false
-    secureOption: false
-    selectDistinct: false
+    postSQL: ""
+    preSQL: ""
+    selectDistinct: true
+    testsEnabled: false
+    truncateBefore: true
   database: ""
   deployEnabled: true
   description: Nation data as defined by TPC-H
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: Materialized View
+  materializationType: table
   metadata:
     appliedNodeTests: []
     columns:
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 8b722ae2-b563-439b-bc45-e9ae66dfef10
-          stepCounter: f53e93da-ca1e-4811-9562-2f349aaead0d
+          columnCounter: f9ce6c57-f47d-450e-a2d5-987b0233946e
+          stepCounter: 47db0215-0ca9-42ba-abec-c36dca35a8c7
         config: {}
         dataType: NUMBER(38,0)
         description: ""
@@ -38,8 +46,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 2fcaf81d-4884-4808-9ad7-7cc47bf81c74
-          stepCounter: f53e93da-ca1e-4811-9562-2f349aaead0d
+          columnCounter: 97b87bda-305f-4c79-90c3-b94f3da5ff35
+          stepCounter: 47db0215-0ca9-42ba-abec-c36dca35a8c7
         config: {}
         dataType: VARCHAR(25)
         description: ""
@@ -52,8 +60,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 3f519ea1-256a-4610-9875-650dae08a039
-          stepCounter: f53e93da-ca1e-4811-9562-2f349aaead0d
+          columnCounter: 247b82b2-0cff-458e-bf96-42e274fdd739
+          stepCounter: 47db0215-0ca9-42ba-abec-c36dca35a8c7
         config: {}
         dataType: NUMBER(38,0)
         description: ""
@@ -66,8 +74,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 79f12729-004a-4599-8fc9-4a0df2194709
-          stepCounter: f53e93da-ca1e-4811-9562-2f349aaead0d
+          columnCounter: f50deed1-2637-4827-8729-01f073ad2a35
+          stepCounter: 47db0215-0ca9-42ba-abec-c36dca35a8c7
         config: {}
         dataType: VARCHAR(152)
         description: ""
@@ -90,12 +98,12 @@ operation:
             nodeName: NATION
         join:
           joinCondition: FROM  {{ ref('SOURCE_DATA', 'NATION') }} NATION
-        name: WRK_NATION1
+        name: WRK_NATION_01
         noLinkRefs: []
-  name: WRK_NATION1
+  name: WRK_NATION_01
   overrideSQL: false
   schema: ""
-  sqlType: "178"
+  sqlType: base-node-types:::204
   type: sql
   version: 1
 type: Node
