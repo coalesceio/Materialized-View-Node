@@ -3,30 +3,22 @@ id: c4190deb-b3ca-4a78-9f7f-7cb74cbd4519
 name: WRK_NATION_001
 operation:
   config:
-    asofColumn:
+    clusterKey: false
+    clusterKeyConfig:
       items:
         - {}
-    asofJoin: true
-    asofJoinMain: false
-    asofJoinON: false
-    asofJoinUSING: false
-    groupByAll: false
-    insertStrategy: INSERT
-    orderby: false
-    orderbycolumn:
+    clusterKeyConfigExpressions:
       items:
         - {}
-    postSQL: ""
-    preSQL: ""
+    clusterKeyExpressions: false
+    secureOption: false
     selectDistinct: true
-    testsEnabled: false
-    truncateBefore: true
   database: ""
   deployEnabled: true
   description: Nation data as defined by TPC-H
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -103,7 +95,7 @@ operation:
   name: WRK_NATION_001
   overrideSQL: false
   schema: ""
-  sqlType: base-node-types:::204
+  sqlType: "178"
   type: sql
   version: 1
 type: Node

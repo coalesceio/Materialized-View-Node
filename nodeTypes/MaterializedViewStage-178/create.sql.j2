@@ -154,7 +154,7 @@ does not permit copying or modification for any other purpose.
 
             {% endif %}
         {% endif %}
-        {% if currentState.node.materializationType != desiredState.node.materializationType %}
+        {% if createTest == true and  currentState.node.materializationType != desiredState.node.materializationType %}
             {# Change in materialization type #}
 
                     {{ stage('Drop ' + currentState.node.materializationType + ' ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
