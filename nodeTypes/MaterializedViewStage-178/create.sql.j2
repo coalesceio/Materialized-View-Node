@@ -157,9 +157,12 @@ does not permit copying or modification for any other purpose.
         {% if createTest == true and  currentState.node.materializationType != desiredState.node.materializationType %}
             {# Change in materialization type #}
 
-                    {{ stage('Drop ' + currentState.node.materializationType + ' ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
-                    {%- set materialization = dropMaterialization(currentState.node.materializationType) -%}
-                    DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
+            {{ stage('Drop ' + currentState.node.materializationType + ' ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
+            {%- if currentState.node.materializationType in ['stream', 'task'] -%}
+                    -- ⚠️ Warning: Tasks or streams are attached to this node. Changing its type may cause task failures, stream inconsistencies, or data loss.
+            {%- endif -%}
+            {%- set materialization = dropMaterialization(currentState.node.materializationType) -%}
+            DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
         {% endif %}
 
         {{ stage('Create Materialized View',true, "sql", "create") }}
