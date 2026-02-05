@@ -1,6 +1,6 @@
 fileVersion: 1
 id: c4190deb-b3ca-4a78-9f7f-7cb74cbd4519
-name: WRK_NATION_001
+name: MV_NATION_001
 operation:
   config:
     clusterKey: false
@@ -90,9 +90,9 @@ operation:
             nodeName: NATION
         join:
           joinCondition: FROM  {{ ref('SOURCE_DATA', 'NATION') }} NATION
-        name: WRK_NATION_001
+        name: MV_NATION_001
         noLinkRefs: []
-  name: WRK_NATION_001
+  name: MV_NATION_001
   overrideSQL: false
   schema: ""
   sqlType: "178"
