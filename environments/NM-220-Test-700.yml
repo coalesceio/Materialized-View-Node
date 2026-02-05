@@ -1,0 +1,17 @@
+fileVersion: 1
+id: "700"
+mappingDefinitions:
+  SOURCE_DATA:
+    database: SNOWFLAKE_SAMPLE_DATA
+    schema: TPCH_SF100
+  TARGET_ACC:
+    database: PRANJAL_DEV
+    schema: SOURCE
+  TARGET_DB:
+    database: PRANJAL_DEV
+    schema: TARGET_DB
+  TARGET_DEV:
+    database: PRANJAL_DEV
+    schema: PUBLIC
+name: "[NM - 220] - Test"
+type: Environment
