@@ -5,13 +5,8 @@ Unauthorized reproduction, distribution, or disclosure of this material is stric
 Coalesce permits you to copy and modify this script for the purposes of using with Coalsce but
 does not permit copying or modification for any other purpose.  
 #}
-{# == Node Type Version        : 1  == #}
 {# == Node Type Name           : Materialized View Stage == #}
 {# == Node Type Description    : This node creates a materialized view == #}
-{#Release date:20240515 Version:1.0.0#}
-{#Release date:20241011  Version:1.1.1 Released By:AS  Description:  Cluster key formatting and default option changes #}
-{#Release date:20241101  Version:1.1.2 Released By:AS  Description: single namespace variable initialization  #}
-{#Release date:20241114  Version:1.1.3 Released By:AS  Description: Node Description / Comments #}
 
 
 {% if desiredState %}
@@ -158,6 +153,13 @@ does not permit copying or modification for any other purpose.
                 {% set nsVariables.finalClusterKey = 'CLUSTER BY (' + nsVariables.clusterValues | join(',') + ')' %}
 
             {% endif %}
+        {% endif %}
+        {% if currentState.node.materializationType != desiredState.node.materializationType %}
+            {# Change in materialization type #}
+
+                    {{ stage('Drop ' + currentState.node.materializationType + ' ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
+                    {%- set materialization = dropMaterialization(currentState.node.materializationType) -%}
+                    DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
         {% endif %}
 
         {{ stage('Create Materialized View',true, "sql", "create") }}
