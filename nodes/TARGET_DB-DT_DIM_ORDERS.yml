@@ -1,0 +1,227 @@
+fileVersion: 1
+id: f7137431-1f34-4c46-90d1-30b2a88e30f1
+name: DT_DIM_ORDERS
+operation:
+  config:
+    advanceWarehouse: false
+    backfill: false
+    backfillSource: ""
+    backfillSourceSchema: ""
+    clusterKey: true
+    clusterKeyConfig:
+      items:
+        - columnName:
+            columnCounter: b9f1b99d-9fe0-4802-be20-5b00b2749490
+            stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+    clusterKeyConfigExpressions:
+      items:
+        - {}
+    clusterKeyExpressions: false
+    cpygrants: false
+    downstreamOption: false
+    immutabilityConstraint: false
+    immutableExpression: ""
+    initialize: ON_CREATE
+    initializeWarehouseSize: ""
+    lagSpecification:
+      items:
+        - lagPeriod: Minutes
+          lagValue: "60"
+    orderBy:
+      items:
+        - colName:
+            columnCounter: 1829b53d-142f-4b5a-88f0-e2e188679096
+            stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+    orderByDateTime:
+      items:
+        - {}
+    orderseq:
+      items:
+        - {}
+    partitionBy:
+      items:
+        - partColName:
+            columnCounter: b9f1b99d-9fe0-4802-be20-5b00b2749490
+            stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+    recordVersioning: Datetime Column
+    recordorderBy:
+      items:
+        - {}
+    refreshWarehouseSize: ""
+    refresh_mode: AUTO
+    timeTravel: false
+    timeTravelreference: ""
+    timeTraveltype: ""
+    timeTravelvalue: ""
+    warehouseName: COMPUTE_WH
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: TARGET_DB
+  materializationType: transient dynamic table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 91bdbf9d-f763-4041-b232-3a3791e305a6
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        isSurrogateKey: true
+        name: DT_DIM_ORDERS_KEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: "{{ dimensionHistoryPk() }}"
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b9f1b99d-9fe0-4802-be20-5b00b2749490
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        name: O_ORDERKEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63854b2b-d490-4bbb-b5c4-4c65558d04d5
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ffd0e953-cb4d-46ef-ad93-db54174409f5
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        name: O_ORDERNAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 32574291-b870-4b4f-9d3e-6f2b32c0b962
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 04af7886-9830-4533-87b9-814f4b2becc5
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: DATE
+        description: ""
+        name: O_ORDERDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8bcb20db-5673-4837-ae8a-48a9fb6b1379
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1829b53d-142f-4b5a-88f0-e2e188679096
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: CREATED_AT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7aaccca4-1b21-46a6-abc0-dc37306ec320
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        isSystemStartDate: true
+        name: RECORD_START_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: "{%if config.recordVersioning not in ('Integer Column')%}{{order_by_col()}}{%else%} {{order_by_col_int()}}{%endif%}"
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: e423cd04-5196-4f55-83c6-c023d3952b65
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        isSystemEndDate: true
+        name: RECORD_END_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: LEAD({%if config.recordVersioning not in ('Integer Column')%}{{order_by_col()}}{%else%}{{order_by_col_int()}} {%endif%}) OVER (PARTITION BY {{ partition_by() }} ORDER BY {{ order_by_col() }} asc)
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: f98c4130-591a-4274-a7d8-d42447f1d2d6
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: NUMERIC
+        defaultValue: ""
+        description: ""
+        isRecordCurrent: true
+        name: RECORD_CURRENT_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: CASE WHEN (LEAD({%if config.recordVersioning not in ('Integer Column')%}{{order_by_col()}}{%else%}{{order_by_col_int()}} {%endif%}) OVER (PARTITION BY {{ partition_by() }} ORDER BY {{ order_by_col() }} asc)) IS NULL THEN 1 ELSE 0 END
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9a394c40-9358-4486-b49b-125dddaf2e8e
+          stepCounter: f7137431-1f34-4c46-90d1-30b2a88e30f1
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        name: RECORD_CREATED_DATE
+        nullable: true
+        recordCreated: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: FIRST_VALUE({%if config.recordVersioning not in ('Integer Column')%}{{order_by_col()}}{%else%} {{order_by_col_int()}}{%endif%}) OVER (PARTITION BY {{ partition_by() }} ORDER BY {{ order_by_col() }} asc)
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ORDERS: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: SOURCE_DATA
+            nodeName: ORDERS
+        join:
+          joinCondition: FROM {{ ref('SOURCE_DATA', 'ORDERS') }} "ORDERS"
+        name: DT_DIM_ORDERS
+        noLinkRefs: []
+  name: DT_DIM_ORDERS
+  overrideSQL: false
+  schema: ""
+  sqlType: dynamic-tables:::350
+  type: sql
+  version: 1
+type: Node
