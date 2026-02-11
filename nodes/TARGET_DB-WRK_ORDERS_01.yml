@@ -3,30 +3,22 @@ id: b02c68bf-13dc-4c20-89ed-689691aa8e01
 name: WRK_ORDERS_01
 operation:
   config:
-    asofColumn:
+    clusterKey: false
+    clusterKeyConfig:
       items:
         - {}
-    asofJoin: true
-    asofJoinMain: false
-    asofJoinON: false
-    asofJoinUSING: false
-    groupByAll: false
-    insertStrategy: INSERT
-    orderby: false
-    orderbycolumn:
+    clusterKeyConfigExpressions:
       items:
         - {}
-    postSQL: ""
-    preSQL: ""
+    clusterKeyExpressions: false
+    secureOption: false
     selectDistinct: true
-    testsEnabled: false
-    truncateBefore: true
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -103,7 +95,7 @@ operation:
   name: WRK_ORDERS_01
   overrideSQL: false
   schema: ""
-  sqlType: base-node-types:::204
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
