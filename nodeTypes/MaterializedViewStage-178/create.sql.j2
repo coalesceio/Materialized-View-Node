@@ -10,6 +10,18 @@ does not permit copying or modification for any other purpose.
 
 
 {% if desiredState %}
+
+    {%- if currentState != undefined and currentState.node.nodeType != desiredState.node.nodeType %}
+        {%- set warningMsg = getNodeTypeSwitchWarning() | default('') %}
+
+        {# Warning display - Node type changes can impact related tasks, streams, or services. #}
+        {%- if warningMsg | trim | length > 0 -%}
+            {{ stage('Warning! Node Type Switching Detected', false) }}
+            {{ warningMsg }}
+            select 1=0
+        {%- endif -%}
+    {%- endif -%}
+
     {# Identify all config changes that would cause a CREATE instead of ALTER #}
     {% if currentState != undefined %} 
         {# General metadata #}
@@ -156,11 +168,7 @@ does not permit copying or modification for any other purpose.
         {% endif %}
         {% if createTest == true and  currentState.node.materializationType != desiredState.node.materializationType %}
             {# Change in materialization type #}
-            {{ stage('Drop ' + currentState.node.materializationType + ' ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
-            {%- if currentState.node.materializationType in ['stream', 'task'] -%}
-                -- ⚠️ Warning: Tasks or streams are attached to this node. Changing its type may cause task failures, stream inconsistencies, or data loss.
-            {%- endif %}
-
+            {{ stage('Drop ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
             {%- set materialization = dropMaterialization(currentState.node.materializationType) %}
             DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
 
