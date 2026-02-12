@@ -3,7 +3,6 @@ id: aebd30ba-ac1b-43d3-9d07-bd88dd444d6e
 name: INTTBL_ORDERS
 operation:
   config:
-    autoRefresh: true
     clusterKey: true
     clusterKeyConfig:
       items:
@@ -14,21 +13,14 @@ operation:
       items:
         - {}
     clusterKeyExpressions: false
-    groupByAll: false
-    insertStrategy: UNION ALL
-    lagSpecification:
-      items:
-        - lagPeriod: Minutes
-          lagValue: "60"
+    secureOption: false
     selectDistinct: true
-    testsEnabled: false
-    warehouseName: COMPUTE_WH
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: interactive table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -105,7 +97,7 @@ operation:
   name: INTTBL_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: interactive-table:::602
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
