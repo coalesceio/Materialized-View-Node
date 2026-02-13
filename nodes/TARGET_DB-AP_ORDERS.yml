@@ -80,23 +80,6 @@ operation:
               - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
                 stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
             transform: ""
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: d795a868-6d67-4245-9f27-fc62a8ea4ab4
-          stepCounter: 02d6d49a-b2cc-45cb-b0e4-2cc43b4c096a
-        config: {}
-        dataType: timestamp
-        defaultValue: ""
-        description: ""
-        hmUpdTs: true
-        name: DM_UPDATE_TIMESTAMP
-        nullable: true
-        sourceColumnReferences:
-          - columnReferences: []
-            transform: current_timestamp::timestamp_ntz
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
