@@ -40,7 +40,7 @@ does not permit copying or modification for any other purpose.
 
             
         {# Config #}
-        {% set selectDistinctTest = currentState.config.selectDistinct == desiredState.config.selectDistinct %}
+        {% set selectDistinctTest = currentState.config.selectDistinct | default(false) == desiredState.config.selectDistinct %}
 
         {# Node #}
         {% set nodeMaterializationType = currentState.node.materializationType == desiredState.node.materializationType %}
@@ -91,15 +91,15 @@ does not permit copying or modification for any other purpose.
         
         {% set nodeNameTest = currentState.node.name == desiredState.node.name %}
 
-        {% set secureOptionTest = currentState.config.secureOption == desiredState.config.secureOption %}
+        {% set secureOptionTest = currentState.config.secureOption | default(false) == desiredState.config.secureOption %}
 
         {% set nodeCommentTest = currentState.node.description == desiredState.node.description %}
 
         {# Clustering Test #}
-        {% set clusterKeyTest = currentState.config.clusterKey == desiredState.config.clusterKey %}
-        {% set clusterKeyExpressionsTest = currentState.config.clusterKeyExpressions == desiredState.config.clusterKeyExpressions %}
-        {% set clusterKeyConfigTest = currentState.config.clusterKeyConfig == desiredState.config.clusterKeyConfig %}
-        {% set clusterKeyConfigExpressionsTest = currentState.config.clusterKeyConfigExpressions == desiredState.config.clusterKeyConfigExpressions %}
+        {% set clusterKeyTest = currentState.config.clusterKey | default(false) == desiredState.config.clusterKey %}
+        {% set clusterKeyExpressionsTest = currentState.config.clusterKeyExpressions | default(false) == desiredState.config.clusterKeyExpressions %}
+        {% set clusterKeyConfigTest = currentState.config.clusterKeyConfig | default({'items': [{}]}) == desiredState.config.clusterKeyConfig %}
+        {% set clusterKeyConfigExpressionsTest = currentState.config.clusterKeyConfigExpressions | default({'items': [{}]}) == desiredState.config.clusterKeyConfigExpressions %}
 
         {% if 
             clusterKeyTest == false or
@@ -228,7 +228,7 @@ does not permit copying or modification for any other purpose.
         {% set currentNodeName = currentState.node.name %}
 
         {# Current Secure Option #}
-        {% set currentSecureOption = currentState.config.secureOption %}
+        {% set currentSecureOption = currentState.config.secureOption | default(false) %}
 
         {# Current Comment #}
         {% set currentNodeComment = currentState.node.description %}
