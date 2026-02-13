@@ -3,10 +3,6 @@ id: b4c8d56f-9dd8-40e1-aaf7-ac057b013302
 name: DT_WRK_ORDERS
 operation:
   config:
-    advanceWarehouse: false
-    backfill: false
-    backfillSource: ""
-    backfillSourceSchema: ""
     clusterKey: true
     clusterKeyConfig:
       items:
@@ -17,32 +13,14 @@ operation:
       items:
         - {}
     clusterKeyExpressions: false
-    cpygrants: false
-    downstreamOption: false
-    groupByAll: false
-    immutabilityConstraint: true
-    immutableExpression: CREATED_AT < CURRENT_TIMESTAMP() - INTERVAL '7 days'
-    initialize: ON_CREATE
-    initializeWarehouseSize: ""
-    insertStrategy: UNION ALL
-    lagSpecification:
-      items:
-        - lagPeriod: Minutes
-          lagValue: "60"
-    refreshWarehouseSize: ""
-    refresh_mode: AUTO
+    secureOption: false
     selectDistinct: true
-    timeTravel: false
-    timeTravelreference: ""
-    timeTraveltype: ""
-    timeTravelvalue: ""
-    warehouseName: COMPUTE_WH
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: dynamic table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -119,7 +97,7 @@ operation:
   name: DT_WRK_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: dynamic-tables:::347
+  sqlType: "178"
   type: sql
   version: 1
 type: Node

@@ -3,7 +3,6 @@ id: 02d6d49a-b2cc-45cb-b0e4-2cc43b4c096a
 name: AP_ORDERS
 operation:
   config:
-    capUpdate: false
     clusterKey: true
     clusterKeyConfig:
       items:
@@ -14,50 +13,14 @@ operation:
       items:
         - {}
     clusterKeyExpressions: false
-    createas: transient table
-    devMode: true
-    dmlCol:
-      columnCounter: be060aa9-3ce8-4944-a713-b912797376d4
-      stepCounter: 02d6d49a-b2cc-45cb-b0e4-2cc43b4c096a
-    dmlDelete: D
-    dmlInsert: I
-    dmlUpdate: U
-    flagSrcStream: false
-    initialRows: true
-    insertOnly: false
-    orderBy:
-      items:
-        - colName:
-            columnCounter: b4065056-da3e-4c3d-a1ce-a8ff17dd1bc2
-            stepCounter: 02d6d49a-b2cc-45cb-b0e4-2cc43b4c096a
-          sortOrd: desc
-    orderByDateTime:
-      items:
-        - {}
-    partitionBy:
-      items:
-        - partColName:
-            columnCounter: 6c568ecc-51fb-4e38-ab7e-fdb21a1d48c2
-            stepCounter: 02d6d49a-b2cc-45cb-b0e4-2cc43b4c096a
-    predTask: ""
-    recordVersioning: Datetime Column
-    redeploymentBehavior: Create At Existing Stream
-    retainLastNonDeleteFlag: false
-    rootTask: ""
-    scheduleCRON: 5 0-23 * * * America/Los_Angeles
-    schedulePeriod: "60"
-    schedulePeriodOption: Minutes
-    schedulingMode: Warehouse Task
-    serverlessSize: MEDIUM
-    softDeleteFlag: true
-    sourceType: Table
-    whName: <WAREHOUSE_NAME>
+    secureOption: false
+    selectDistinct: false
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -151,7 +114,7 @@ operation:
   name: AP_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: deferred-merge:::300
+  sqlType: "178"
   type: sql
   version: 1
 type: Node

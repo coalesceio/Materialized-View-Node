@@ -11,41 +11,14 @@ operation:
       items:
         - {}
     clusterKeyExpressions: false
-    devMode: false
-    flagSrcStream: true
-    groupByAll: false
-    insertStrategy: UNION
-    loadType: Insert
-    mergeOrderBy:
-      items:
-        - {}
-    multiStreamBehavior: AND
-    orderby: true
-    orderbycolumn:
-      items:
-        - sortColName:
-            columnCounter: 538619c3-432e-4088-9626-230b10053f8d
-            stepCounter: 3d7e1377-79cf-4b0d-8bae-1cee833f27b6
-          sortOrder: desc
-    partitionBy:
-      items:
-        - {}
-    predTask: DATA_TRANSFORMATION_ROOT_TASK
-    rootTask: DATA_TRANSFORMATION_ROOT_TASK
-    scheduleCRON: 5 0-23 * * * America/Los_Angeles
-    schedulePeriod: "60"
-    schedulePeriodOption: Minutes
-    schedulingMode: Warehouse Task
+    secureOption: false
     selectDistinct: true
-    serverlessSize: MEDIUM
-    truncateBefore: true
-    whName: COMPUTE_WH
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -105,40 +78,6 @@ operation:
               - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
                 stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
             transform: ""
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: 43922883-9035-44cb-8a66-94170694786e
-          stepCounter: 3d7e1377-79cf-4b0d-8bae-1cee833f27b6
-        config: {}
-        dataType: TIMESTAMP
-        defaultValue: ""
-        description: ""
-        isSystemCreateDate: true
-        name: SYSTEM_CREATE_DATE
-        nullable: true
-        sourceColumnReferences:
-          - columnReferences: []
-            transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: 91ee1ba3-b5ab-42dd-9e67-b07606d724a1
-          stepCounter: 3d7e1377-79cf-4b0d-8bae-1cee833f27b6
-        config: {}
-        dataType: TIMESTAMP
-        defaultValue: ""
-        description: ""
-        isSystemUpdateDate: true
-        name: SYSTEM_UPDATE_DATE
-        nullable: true
-        sourceColumnReferences:
-          - columnReferences: []
-            transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
@@ -156,7 +95,7 @@ operation:
   name: TIM_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: streams-and-tasks:::567
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
