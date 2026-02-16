@@ -3,21 +3,22 @@ id: e5d34b65-3586-458c-8680-23f38e0029e0
 name: TGCR_ORDERS
 operation:
   config:
-    mflagSrcStream: false
-    multiStreamBehavior: AND
-    scheduleCRON: 5 0-23 * * * America/Los_Angeles
-    schedulePeriod: "60"
-    schedulePeriodOption: Minutes
-    schedulingMode: Warehouse Task
-    serverlessSize: MEDIUM
-    tskSql: select current_timestamp()
-    whName: COMPUTE_WH
+    clusterKey: false
+    clusterKeyConfig:
+      items:
+        - {}
+    clusterKeyConfigExpressions:
+      items:
+        - {}
+    clusterKeyExpressions: false
+    secureOption: false
+    selectDistinct: false
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: task
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -94,7 +95,7 @@ operation:
   name: TGCR_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: streams-and-tasks:::154
+  sqlType: "178"
   type: sql
   version: 1
 type: Node

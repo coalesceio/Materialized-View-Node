@@ -3,10 +3,6 @@ id: c9a7dbef-ac5c-415b-a5b5-b0f5025c8d51
 name: DT_WRK_LRV_ORDERS
 operation:
   config:
-    advanceWarehouse: false
-    backfill: false
-    backfillSource: ""
-    backfillSourceSchema: ""
     clusterKey: true
     clusterKeyConfig:
       items:
@@ -17,49 +13,14 @@ operation:
       items:
         - {}
     clusterKeyExpressions: false
-    cpygrants: false
-    downstreamOption: false
-    immutabilityConstraint: false
-    immutableExpression: ""
-    initialize: ON_CREATE
-    initializeWarehouseSize: ""
-    lagSpecification:
-      items:
-        - lagPeriod: Minutes
-          lagValue: "60"
-    orderBy:
-      items:
-        - colName:
-            columnCounter: b9b138a4-9d6d-4f58-933e-6653052ce95a
-            stepCounter: c9a7dbef-ac5c-415b-a5b5-b0f5025c8d51
-    orderByDateTime:
-      items:
-        - {}
-    orderseq:
-      items:
-        - {}
-    partitionBy:
-      items:
-        - partColName:
-            columnCounter: 7e0a1064-b54e-4544-8a9d-2a41f425e80b
-            stepCounter: c9a7dbef-ac5c-415b-a5b5-b0f5025c8d51
-    recordVersioning: Datetime Column
-    recordorderBy:
-      items:
-        - {}
-    refreshWarehouseSize: ""
-    refresh_mode: AUTO
-    timeTravel: false
-    timeTravelreference: ""
-    timeTraveltype: ""
-    timeTravelvalue: ""
-    warehouseName: COMPUTE_WH
+    secureOption: false
+    selectDistinct: false
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: transient dynamic table
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -119,23 +80,6 @@ operation:
               - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
                 stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
             transform: ""
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: e2c8e0f8-bb06-4583-bae7-f1d299e0ddb9
-          stepCounter: c9a7dbef-ac5c-415b-a5b5-b0f5025c8d51
-        config: {}
-        dataType: TIMESTAMP
-        defaultValue: ""
-        description: ""
-        name: RECORD_CREATED_DATE
-        nullable: true
-        recordCreated: true
-        sourceColumnReferences:
-          - columnReferences: []
-            transform: FIRST_VALUE({%if config.recordVersioning not in ('Integer Column')%}{{order_by_col()}}{%else%} {{order_by_col_int()}}{%endif%}) OVER (PARTITION BY {{ partition_by() }} ORDER BY {{ order_by_col() }} asc)
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
@@ -153,7 +97,7 @@ operation:
   name: DT_WRK_LRV_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: dynamic-tables:::351
+  sqlType: "178"
   type: sql
   version: 1
 type: Node

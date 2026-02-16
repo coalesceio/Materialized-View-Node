@@ -3,20 +3,22 @@ id: cfd3cb53-ca8f-49b2-a4aa-477f911dd34b
 name: RV_ORDERS
 operation:
   config:
-    incColumn: ""
-    insertStrategy: UNION ALL
-    persistTableLocation: "ex: TARGET"
-    persistTableName: "ex: DIM_ORDERS"
-    refTable: false
-    srcTable: false
-    suffixlength: ex:1
-    testsEnabled: true
+    clusterKey: false
+    clusterKeyConfig:
+      items:
+        - {}
+    clusterKeyConfigExpressions:
+      items:
+        - {}
+    clusterKeyExpressions: false
+    secureOption: false
+    selectDistinct: false
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
   locationName: TARGET_DB
-  materializationType: run view
+  materializationType: Materialized View
   metadata:
     appliedNodeTests: []
     columns:
@@ -93,7 +95,7 @@ operation:
   name: RV_ORDERS
   overrideSQL: false
   schema: ""
-  sqlType: incremental-loading:::281
+  sqlType: "178"
   type: sql
   version: 1
 type: Node
