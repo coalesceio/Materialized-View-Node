@@ -1,0 +1,155 @@
+fileVersion: 1
+id: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+name: DL_ORDERS
+operation:
+  config:
+    capUpdate: false
+    clusterKey: false
+    clusterKeyConfig:
+      items:
+        - {}
+    clusterKeyConfigExpressions:
+      items:
+        - {}
+    clusterKeyExpressions: false
+    createas: table
+    devMode: true
+    dmlCol:
+      columnCounter: fb179583-7450-449c-8bb4-1d25485ff77e
+      stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+    dmlDelete: D
+    dmlInsert: I
+    dmlUpdate: U
+    flagSrcStream: false
+    initialRows: true
+    insertOnly: false
+    orderBy:
+      items:
+        - colName:
+            columnCounter: 8bf06138-b3c9-4197-83ce-f2cb9e608c79
+            stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+          sortOrd: desc
+    orderByDateTime:
+      items:
+        - {}
+    partitionBy:
+      items:
+        - partColName:
+            columnCounter: bca5aad4-7f21-445f-8aae-d603f0ab2bb0
+            stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+    predTask: ""
+    recordVersioning: Datetime Column
+    redeploymentBehavior: Create At Existing Stream
+    retainLastNonDeleteFlag: false
+    rootTask: ""
+    scheduleCRON: 5 0-23 * * * America/Los_Angeles
+    schedulePeriod: "60"
+    schedulePeriodOption: Minutes
+    schedulingMode: Warehouse Task
+    serverlessSize: MEDIUM
+    softDeleteFlag: false
+    sourceType: Table
+    whName: <WAREHOUSE_NAME>
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: TARGET_DB
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bca5aad4-7f21-445f-8aae-d603f0ab2bb0
+          stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        name: O_ORDERKEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63854b2b-d490-4bbb-b5c4-4c65558d04d5
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fb179583-7450-449c-8bb4-1d25485ff77e
+          stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        name: O_ORDERNAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 32574291-b870-4b4f-9d3e-6f2b32c0b962
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0894ef53-685d-4e57-bf98-92173e36d228
+          stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+        config: {}
+        dataType: DATE
+        description: ""
+        name: O_ORDERDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8bcb20db-5673-4837-ae8a-48a9fb6b1379
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8bf06138-b3c9-4197-83ce-f2cb9e608c79
+          stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: CREATED_AT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 82477136-5cbb-4bfc-8f88-01b5fd617ce0
+          stepCounter: e2eb3a74-7f3a-4b49-8af9-db51c268d010
+        config: {}
+        dataType: timestamp
+        defaultValue: ""
+        description: ""
+        hmUpdTs: true
+        name: DM_UPDATE_TIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: current_timestamp::timestamp_ntz
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ORDERS: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: SOURCE_DATA
+            nodeName: ORDERS
+        join:
+          joinCondition: FROM {{ ref('SOURCE_DATA', 'ORDERS') }} "ORDERS"
+        name: DL_ORDERS
+        noLinkRefs: []
+  name: DL_ORDERS
+  overrideSQL: false
+  schema: ""
+  sqlType: deferred-merge:::301
+  type: sql
+  version: 1
+type: Node

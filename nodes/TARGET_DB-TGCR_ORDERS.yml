@@ -1,0 +1,100 @@
+fileVersion: 1
+id: e5d34b65-3586-458c-8680-23f38e0029e0
+name: TGCR_ORDERS
+operation:
+  config:
+    mflagSrcStream: false
+    multiStreamBehavior: AND
+    scheduleCRON: 5 0-23 * * * America/Los_Angeles
+    schedulePeriod: "60"
+    schedulePeriodOption: Minutes
+    schedulingMode: Warehouse Task
+    serverlessSize: MEDIUM
+    tskSql: select current_timestamp()
+    whName: COMPUTE_WH
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: TARGET_DB
+  materializationType: task
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d23c6f12-b47d-4f16-81a2-1a6fc7f3ec08
+          stepCounter: e5d34b65-3586-458c-8680-23f38e0029e0
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        name: O_ORDERKEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63854b2b-d490-4bbb-b5c4-4c65558d04d5
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0fa895c6-b44f-4ea7-91e9-1f5d016ec9f2
+          stepCounter: e5d34b65-3586-458c-8680-23f38e0029e0
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        name: O_ORDERNAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 32574291-b870-4b4f-9d3e-6f2b32c0b962
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 86593b9b-183d-4914-8051-5b32dded5ed8
+          stepCounter: e5d34b65-3586-458c-8680-23f38e0029e0
+        config: {}
+        dataType: DATE
+        description: ""
+        name: O_ORDERDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8bcb20db-5673-4837-ae8a-48a9fb6b1379
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 55cae39e-e62c-45b1-b64f-79547f742030
+          stepCounter: e5d34b65-3586-458c-8680-23f38e0029e0
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: CREATED_AT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ORDERS: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: SOURCE_DATA
+            nodeName: ORDERS
+        join:
+          joinCondition: FROM {{ ref('SOURCE_DATA', 'ORDERS') }} "ORDERS"
+        name: TGCR_ORDERS
+        noLinkRefs: []
+  name: TGCR_ORDERS
+  overrideSQL: false
+  schema: ""
+  sqlType: streams-and-tasks:::154
+  type: sql
+  version: 1
+type: Node

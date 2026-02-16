@@ -1,0 +1,99 @@
+fileVersion: 1
+id: cfd3cb53-ca8f-49b2-a4aa-477f911dd34b
+name: RV_ORDERS
+operation:
+  config:
+    incColumn: ""
+    insertStrategy: UNION ALL
+    persistTableLocation: "ex: TARGET"
+    persistTableName: "ex: DIM_ORDERS"
+    refTable: false
+    srcTable: false
+    suffixlength: ex:1
+    testsEnabled: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: TARGET_DB
+  materializationType: run view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1006e2ac-031b-4d0e-a2fb-3657b6714cb6
+          stepCounter: cfd3cb53-ca8f-49b2-a4aa-477f911dd34b
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        name: O_ORDERKEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63854b2b-d490-4bbb-b5c4-4c65558d04d5
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ec2c18d8-d392-46bc-9990-06d1e4e5bf8a
+          stepCounter: cfd3cb53-ca8f-49b2-a4aa-477f911dd34b
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        name: O_ORDERNAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 32574291-b870-4b4f-9d3e-6f2b32c0b962
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a1657830-c108-42f9-9c1a-ab6c2a74a363
+          stepCounter: cfd3cb53-ca8f-49b2-a4aa-477f911dd34b
+        config: {}
+        dataType: DATE
+        description: ""
+        name: O_ORDERDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8bcb20db-5673-4837-ae8a-48a9fb6b1379
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d9c90db7-e5fa-46ed-8e52-45fcae90a207
+          stepCounter: cfd3cb53-ca8f-49b2-a4aa-477f911dd34b
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: CREATED_AT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 619bfc20-660b-46a1-8ead-6ae86a049b73
+                stepCounter: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ORDERS: 044794f7-1a80-444b-9a2f-ebdcc7ff4572
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: SOURCE_DATA
+            nodeName: ORDERS
+        join:
+          joinCondition: FROM {{ ref('SOURCE_DATA', 'ORDERS') }} "ORDERS"
+        name: RV_ORDERS
+        noLinkRefs: []
+  name: RV_ORDERS
+  overrideSQL: false
+  schema: ""
+  sqlType: incremental-loading:::281
+  type: sql
+  version: 1
+type: Node
