@@ -5,16 +5,23 @@ Unauthorized reproduction, distribution, or disclosure of this material is stric
 Coalesce permits you to copy and modify this script for the purposes of using with Coalsce but
 does not permit copying or modification for any other purpose.  
 #}
-{# == Node Type Version        : 1  == #}
 {# == Node Type Name           : Materialized View Stage == #}
 {# == Node Type Description    : This node creates a materialized view == #}
-{#Release date:20240515 Version:1.0.0#}
-{#Release date:20241011  Version:1.1.1 Released By:AS  Description:  Cluster key formatting and default option changes #}
-{#Release date:20241101  Version:1.1.2 Released By:AS  Description: single namespace variable initialization  #}
-{#Release date:20241114  Version:1.1.3 Released By:AS  Description: Node Description / Comments #}
 
 
 {% if desiredState %}
+
+    {%- if currentState != undefined and currentState.node.nodeType != desiredState.node.nodeType %}
+        {%- set warningMsg = getNodeTypeSwitchWarning() | default('') %}
+
+        {# Warning display - Node type changes can impact related tasks, streams, or services. #}
+        {%- if warningMsg | trim | length > 0 -%}
+            {{ stage('Warning! Node Type Switching Detected', false) }}
+            {{ warningMsg }}
+            select 1=0
+        {%- endif -%}
+    {%- endif -%}
+
     {# Identify all config changes that would cause a CREATE instead of ALTER #}
     {% if currentState != undefined %} 
         {# General metadata #}
@@ -33,7 +40,7 @@ does not permit copying or modification for any other purpose.
 
             
         {# Config #}
-        {% set selectDistinctTest = currentState.config.selectDistinct == desiredState.config.selectDistinct %}
+        {% set selectDistinctTest = currentState.config.selectDistinct | default(false) == desiredState.config.selectDistinct %}
 
         {# Node #}
         {% set nodeMaterializationType = currentState.node.materializationType == desiredState.node.materializationType %}
@@ -84,15 +91,15 @@ does not permit copying or modification for any other purpose.
         
         {% set nodeNameTest = currentState.node.name == desiredState.node.name %}
 
-        {% set secureOptionTest = currentState.config.secureOption == desiredState.config.secureOption %}
+        {% set secureOptionTest = currentState.config.secureOption | default(false) == desiredState.config.secureOption %}
 
         {% set nodeCommentTest = currentState.node.description == desiredState.node.description %}
 
         {# Clustering Test #}
-        {% set clusterKeyTest = currentState.config.clusterKey == desiredState.config.clusterKey %}
-        {% set clusterKeyExpressionsTest = currentState.config.clusterKeyExpressions == desiredState.config.clusterKeyExpressions %}
-        {% set clusterKeyConfigTest = currentState.config.clusterKeyConfig == desiredState.config.clusterKeyConfig %}
-        {% set clusterKeyConfigExpressionsTest = currentState.config.clusterKeyConfigExpressions == desiredState.config.clusterKeyConfigExpressions %}
+        {% set clusterKeyTest = currentState.config.clusterKey | default(false) == desiredState.config.clusterKey %}
+        {% set clusterKeyExpressionsTest = currentState.config.clusterKeyExpressions | default(false) == desiredState.config.clusterKeyExpressions %}
+        {% set clusterKeyConfigTest = currentState.config.clusterKeyConfig | default({'items': [{}]}) == desiredState.config.clusterKeyConfig %}
+        {% set clusterKeyConfigExpressionsTest = currentState.config.clusterKeyConfigExpressions | default({'items': [{}]}) == desiredState.config.clusterKeyConfigExpressions %}
 
         {% if 
             clusterKeyTest == false or
@@ -159,6 +166,13 @@ does not permit copying or modification for any other purpose.
 
             {% endif %}
         {% endif %}
+        {% if createTest == true and  currentState.node.materializationType != desiredState.node.materializationType %}
+            {# Change in materialization type #}
+            {{ stage('Drop ' + ref_no_link(currentState.node.location.name, currentState.node.name)) }}
+            {%- set materialization = dropMaterialization(currentState.node.materializationType) %}
+            DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
+
+        {% endif %}
 
         {{ stage('Create Materialized View',true, "sql", "create") }}
         CREATE OR REPLACE {% if desiredState.config.secureOption %} SECURE {% endif %} MATERIALIZED VIEW {{ fullyQualifiedTargetMaterializedViewName }}
@@ -214,7 +228,7 @@ does not permit copying or modification for any other purpose.
         {% set currentNodeName = currentState.node.name %}
 
         {# Current Secure Option #}
-        {% set currentSecureOption = currentState.config.secureOption %}
+        {% set currentSecureOption = currentState.config.secureOption | default(false) %}
 
         {# Current Comment #}
         {% set currentNodeComment = currentState.node.description %}
@@ -307,8 +321,9 @@ does not permit copying or modification for any other purpose.
     {% set targetMaterializedViewSchema = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[1] %} 
     {% set fullyQualifiedTargetMaterializedViewName = ref_no_link(currentState.node.location.name, currentState.node.name) %}
 
-    {{ stage('Drop Materialized View') }}
-    DROP MATERIALIZED VIEW IF EXISTS {{ fullyQualifiedTargetMaterializedViewName }}
+    {{ stage('Drop ' + currentState.node.materializationType ) }}
+    {%- set materialization = dropMaterialization(currentState.node.materializationType) -%}
+    DROP {{ materialization }} {{ ref_no_link(currentState.node.location.name, currentState.node.name) }}
 
 
 {% endif %}
