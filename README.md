@@ -1,8 +1,8 @@
 # Materialized View Stage
 
-The Coalesce Materialized View Stage UDN is a versatile node that allows you to develop and deploy a Materialized View in Snowflake.
+The Coalesce Materialized View Stage UDN is a versatile Node that allows you to develop and deploy a Materialized View in Snowflake.
 
-A [materialized view](https://docs.snowflake.com/en/user-guide/views-materialized) is a pre-computed data set derived from a query specification (the SELECT in the view definition) and stored for later use. materialized views can speed up expensive aggregation, projection, and selection operations, especially those that run frequently and that run on large data sets.
+A [materialized view](https://docs.snowflake.com/en/user-guide/views-materialized) is a pre-computed data set derived from a query specification (the SELECT in the view definition) and stored for later use. Materialized views can speed up expensive aggregation, projection, and selection operations, especially those that run frequently and that run on large data sets.
 
 ## Node Configuration
 
@@ -19,8 +19,8 @@ There are four configs within the **Node Properties** group.
 |-------------|-----------------|
 | **Storage Location** | Storage Location where the Materialized View will be created |
 | **Node Type** | Name of template used to create node objects |
-| **Description** | A description of the node's purpose |
-| **Deploy Enabled** | If TRUE the node will be deployed / redeployed when changes are detected<br/>If FALSE the node will not be deployed or will be dropped during redeployment |
+| **Description** | A description of the Node's purpose |
+| **Deploy Enabled** | If TRUE the Node will be deployed or redeployed when changes are detected<br/>If FALSE the Node will not be deployed or will be dropped during redeployment |
 
 ### Materialized View Options
 
@@ -37,9 +37,9 @@ There are two configs within the **Materialized View Options** group.
 |------------|----------------|
 | **Distinct** | True / False toggle that specifies whether or not to return DISTINCT rows |
 
-## Limitations of Materialized view
+## Limitations of Materialized View
 
-Materialized view has a set of limitations:
+Materialized View has a set of limitations:
 
 * A materialized view cannot query a materialized or non-materialized view
 * A materialized view does not support group by all but group by is supported
@@ -81,19 +81,19 @@ If anything changes other than the configuration options specified above then th
 
 ### Redeployment with no changes 
 
-If the nodes are redeployed with no changes compared to previous deployment,then no stages are executed
+If the Nodes are redeployed with no changes compared to previous deployment, then no stages are executed
 
 #### Node Type Switching
 
 Node Type switching is supported starting from Coalesce version **7.28+**.
 
-From this version onward, a node’s materialization type can be switched from one supported type to another, subject to certain limitations.
+From this version onward, a Node's materialization type can be switched from one supported type to another, subject to certain limitations.
 
-For more info click here - [Node Type Switching Logic and Limitations](#node-type-switching-logic)
+For more information, see [Node Type Switching Logic and Limitations](#node-type-switching-logic)
 
 ### Undeployment
 
-If a Materialized View is deleted from a Workspace, that Workspace is committed to Git and that commit deployed to a higher-level environment then the Materialized View in the target environment will be dropped.
+If a Materialized View is deleted from a Workspace, that Workspace is committed to Git and that commit deployed to a higher-level Environment, then the Materialized View in the target Environment will be dropped.
 
 This is executed as a single stage:
 
@@ -109,19 +109,19 @@ This is executed as a single stage:
 | Materialized View | Materialized View | Follows existing redeployment stage |
 | Any Other | Materialized View | 1. Warning (if applicable)<br/>2. Drop <br/> 3. Create |
 
-Please review the documented limitations before performing a node type switch to ensure compatibility and avoid unintended deployment issues.
+Review the documented limitations before performing a Node type switch to ensure compatibility and avoid unintended deployment issues.
 
 #### ⚠ Limitations of Node Type Switching (Current)
 
 | # | Current Materialization | Desired Materialization | Limitation |
 |---|--------------------------|--------------------------|------------|
 | 1 | Older Version Iceberg Table | Table | Results in `ALTER` failure. Iceberg tables require `ALTER ICEBERG TABLE`. Works only if latest package (with switching support) is already used. |
-| 2 | Older Version Create or Alter View | Any | Switch fails unless current node uses latest package supporting node type switching. |
-| 3 | First Node in Pipeline | Any | Not supported. First node is foundational and switching may disrupt the pipeline. |
-| 4 | External Packages | Any | Not supported as they typically act as first nodes in the pipeline. |
+| 2 | Older Version Create or Alter View | Any | Switch fails unless the current Node uses the latest package that supports Node type switching. |
+| 3 | First Node in Pipeline | Any | Not supported. First Node is foundational and switching may disrupt the pipeline. |
+| 4 | External Packages | Any | Not supported as they typically act as first Nodes in the pipeline. |
 | 5 | Functional Packages | Any | Not supported due to column re-sync behavior which may cause schema inconsistencies. |
 | 6 | Dynamic Dimension / LRV | Any | System columns must be manually dropped before redeployment. |
-| 7 | Any | Any Other | After performing node switching, the `Create/Run` in Workspace browser may not work as expected due to changes in the node’s materialization type. |
+| 7 | Any | Any Other | After performing node switching, the `Create/Run` in Workspace browser may not work as expected due to changes in the Node's materialization type. |
 | 8 | Table(Data Profiling) | Table | This may result in ALTER failure unless latest package is used(with system column removal support)(Pending Release) |
 
 --------------
