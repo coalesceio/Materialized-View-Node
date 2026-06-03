@@ -79,7 +79,7 @@ There are two config changes that if made in isolation or all-together will resu
 
 If anything changes other than the configuration options specified above then the Materialized View will be recreated by running a CREATE OR REPLACE statement.
 
-### Redeployment with no changes 
+### Redeployment With No Changes 
 
 If the Nodes are redeployed with no changes compared to previous deployment, then no stages are executed
 
